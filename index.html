@@ -1,122 +1,58 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Superset Dashboard</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управленческие дашборды</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
             height: 100vh;
-            display: flex;
-            flex-direction: column;
-            color: white;
-            overflow: hidden;
+            background: #f8f9fa;
+            color: #212529;
         }
         
-        .header {
-            padding: 18px 20px;
-            background: rgba(0, 10, 20, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(100, 150, 255, 0.2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 10;
+        header {
+            padding: 16px;
+            background: #ffffff;
+            border-bottom: 1px solid #dee2e6;
         }
         
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 20px;
-            box-shadow: 0 0 15px rgba(0, 114, 255, 0.5);
-        }
-        
-        h1 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            background: linear-gradient(90deg, #e0e0ff, #4facfe);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .main-content {
-            flex: 1;
-            display: flex;
-            padding: 20px;
-            gap: 20px;
-            overflow: hidden;
-        }
-        
-        .dashboard-wrapper {
-            flex: 1;
-            background: rgba(5, 15, 30, 0.6);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(100, 150, 255, 0.15);
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .dashboard-header {
-            padding: 15px 20px;
-            background: rgba(0, 20, 40, 0.7);
-            border-bottom: 1px solid rgba(100, 150, 255, 0.1);
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
         
-        .controls {
-            display: flex;
-            gap: 12px;
-        }
-        
-        .btn {
-            background: rgba(100, 150, 255, 0.2);
-            color: #a0c0ff;
-            border: 1px solid rgba(100, 150, 255, 0.3);
+        .fullscreen-btn {
             padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.9rem;
+            background: #e9ecef;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            font-size: 14px;
+            transition: all 0.2s;
         }
         
-        .btn:hover {
-            background: rgba(100, 150, 255, 0.3);
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
-            color: white;
-            border: none;
+        .fullscreen-btn:hover {
+            background: #dee2e6;
         }
         
         .iframe-container {
             flex: 1;
-            position: relative;
             overflow: hidden;
+            background: #ffffff;
         }
         
         iframe {
@@ -125,229 +61,52 @@
             border: none;
         }
         
-        .loader {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(5, 15, 30, 0.9);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 20;
-            transition: opacity 0.5s;
-        }
-        
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(100, 150, 255, 0.2);
-            border-top: 5px solid #00c6ff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .error-panel {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(10, 5, 20, 0.95);
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 30px;
+        footer {
+            padding: 12px;
             text-align: center;
-            z-index: 30;
-        }
-        
-        .status-info {
-            padding: 15px 20px;
-            background: rgba(0, 10, 20, 0.7);
-            border-top: 1px solid rgba(100, 150, 255, 0.1);
-            font-size: 0.9rem;
-            color: #a0c0ff;
-            display: flex;
-            gap: 10px;
-        }
-        
-        .status-indicator {
-            width: 12px;
-            height: 12px;
-            background: #00ff9d;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #00ff9d;
-            margin-top: 3px;
-        }
-        
-        .footer {
-            padding: 15px 20px;
-            text-align: center;
-            font-size: 0.85rem;
-            color: rgba(160, 180, 220, 0.7);
-            background: rgba(0, 5, 15, 0.8);
-            border-top: 1px solid rgba(100, 150, 255, 0.1);
-        }
-        
-        /* Адаптивность */
-        @media (max-width: 768px) {
-            .main-content {
-                padding: 10px;
-                flex-direction: column;
-            }
-            
-            .dashboard-header {
-                flex-direction: column;
-                gap: 12px;
-            }
-            
-            .controls {
-                width: 100%;
-                justify-content: space-between;
-            }
+            background: #ffffff;
+            border-top: 1px solid #dee2e6;
+            font-size: 14px;
+            color: #6c757d;
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="logo">
-            <div class="logo-icon">D</div>
-            <h1>Business Analytics Dashboard</h1>
-        </div>
-        <div class="controls">
-            <button class="btn" onclick="refreshDashboard()">⟳ Обновить</button>
-            <button class="btn btn-primary" onclick="openFullscreen()">⛶ Полный экран</button>
+    <header>
+        <div class="header-content">
+            <h1>Управленческие дашборды</h1>
+            <button class="fullscreen-btn" onclick="toggleFullscreen()">Открыть в полном экране</button>
         </div>
     </header>
     
-    <div class="main-content">
-        <div class="dashboard-wrapper">
-            <div class="dashboard-header">
-                <div>ID дашборда: <code>41daa2cf-c05e-4281-8408-843c514ca91e</code></div>
-                <div>Режим: <span id="accessMode">Встраивание</span></div>
-            </div>
-            
-            <div class="iframe-container">
-                <div class="loader" id="loader">
-                    <div class="spinner"></div>
-                    <p>Загрузка аналитической панели...</p>
-                </div>
-                
-                <div class="error-panel" id="errorPanel">
-                    <h2>⚠ Ошибка подключения</h2>
-                    <p style="max-width: 500px; margin: 20px 0; line-height: 1.6;">
-                        Не удалось загрузить дашборд. Пожалуйста, проверьте:<br>
-                        - Доступность сервера<br>
-                        - Корректность идентификатора дашборда<br>
-                        - Сетевое подключение
-                    </p>
-                    <button class="btn btn-primary" onclick="retryLoading()">Повторить попытку</button>
-                    <button class="btn" onclick="Telegram.WebApp.openLink('https://vm-f0f0f249.na4u.ru/superset/dashboard/14/')" style="margin-top: 15px;">
-                        Открыть дашборд
-                    </button>
-                </div>
-                
-                <iframe 
-                    id="dashboardFrame"
-                    src="https://vm-f0f0f249.na4u.ru/superset/dashboard/41daa2cf-c05e-4281-8408-843c514ca91e/"
-                    onload="hideLoader()"
-                    onerror="showError()"
-                    allow="fullscreen"
-                ></iframe>
-            </div>
-            
-            <div class="status-info">
-                <div class="status-indicator"></div>
-                <div>Статус: <span id="statusText">Загрузка...</span></div>
-            </div>
-        </div>
-    </div>
+    <main class="iframe-container">
+        <iframe 
+            id="dashboardFrame" 
+            src="https://vm-f0f0f249.na4u.ru/superset/dashboard/14/" 
+            title="Управленческие дашборды"
+        ></iframe>
+    </main>
     
-    <div class="footer">
-        © 2025 Business Intelligence System | Данные обновляются в реальном времени
-    </div>
+    <footer>
+        разработано в 2025 году
+    </footer>
 
     <script>
-        // Инициализация Telegram WebApp
-        Telegram.WebApp.expand();
-        Telegram.WebApp.enableClosingConfirmation();
-        
-        const loader = document.getElementById('loader');
-        const errorPanel = document.getElementById('errorPanel');
-        const statusText = document.getElementById('statusText');
-        const frame = document.getElementById('dashboardFrame');
-        const accessMode = document.getElementById('accessMode');
-        
-        // Показать/скрыть лоадер
-        function showLoader() {
-            loader.style.display = 'flex';
-            statusText.textContent = 'Загрузка...';
-        }
-        
-        function hideLoader() {
-            loader.style.opacity = '0';
-            setTimeout(() => {
-                loader.style.display = 'none';
-                statusText.textContent = 'Панель загружена';
-                accessMode.textContent = 'Активная сессия';
-            }, 500);
-        }
-        
-        // Показать ошибку
-        function showError() {
-            errorPanel.style.display = 'flex';
-            statusText.textContent = 'Ошибка подключения';
-            accessMode.textContent = 'Ошибка доступа';
-        }
-        
-        // Повторная попытка
-        function retryLoading() {
-            showLoader();
-            errorPanel.style.display = 'none';
+        function toggleFullscreen() {
+            const elem = document.getElementById('dashboardFrame');
             
-            // Добавляем параметр кеширования для обхода кеша
-            frame.src = frame.src.split('?')[0] + '?retry=' + Date.now();
-        }
-        
-        // Обновить дашборд
-        function refreshDashboard() {
-            showLoader();
-            frame.contentWindow.location.reload(true);
-        }
-        
-        // Полноэкранный режим
-        function openFullscreen() {
-            if (frame.requestFullscreen) {
-                frame.requestFullscreen();
-            } else if (frame.webkitRequestFullscreen) {
-                frame.webkitRequestFullscreen();
-            } else if (frame.msRequestFullscreen) {
-                frame.msRequestFullscreen();
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen().catch(err => {
+                        console.error(`Ошибка при переходе в полноэкранный режим: ${err.message}`);
+                    });
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
             }
         }
-        
-        // Автоматическая проверка доступности
-        async function checkDashboardAvailability() {
-            try {
-                const response = await fetch(frame.src, { method: 'HEAD' });
-                if (!response.ok) showError();
-            } catch (e) {
-                showError();
-            }
-        }
-        
-        // Запуск проверки при загрузке
-        setTimeout(checkDashboardAvailability, 5000);
     </script>
 </body>
 </html>
