@@ -4,88 +4,1109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: #f5f7fa;
-            text-align: center;
-        }
-        
-        .container {
-            max-width: 90%;
-        }
-        
-        .dashboard-btn {
-            padding: 16px 32px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: 600;
-            transition: all 0.3s;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        .dashboard-btn:hover {
-            background: #0056b3;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
-        
-        .dashboard-btn:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        .description {
-            color: #495057;
-            margin-bottom: 30px;
-            max-width: 500px;
-            line-height: 1.5;
-        }
-        
-        footer {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            padding: 15px;
-            text-align: center;
-            font-size: 14px;
-            color: #6c757d;
-        }
-    </style>
+    <title>Финансовый дашборд</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@3.3.0/build/global/luxon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1"></script>
+
 </head>
 <body>
-    <div class="container">
-        <button class="dashboard-btn" onclick="openDashboard()">Открыть дашборд</button>
-        <p class="description">Нажмите кнопку выше для просмотра управленческих дашбордов в новой вкладке браузера</p>
-    </div>
-    
-    <footer>
-        разработано в 2025 году
-    </footer>
+    <div class="header-buttons">
+        <a href="https://kseni-lerma.github.io/chat-bot" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            <span class="back-text">Назад</span>
+        </a>
+        <div class="sidebar-toggle">
+            <i class="fas fa-bars"></i>
+            <span>Меню</span>
+        </div>
 
+    </div>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-chart-pie"></i> Разделы</h2>
+        </div>
+        <ul class="sidebar-menu">
+
+            <li class="menu-item has-submenu active" data-section="Ипотека">
+                <div class="menu-main-item">
+                    <i class="fas fa-home"></i>
+                    <span>Ипотека</span>
+                    <i class="fas fa-chevron-down submenu-toggle"></i>
+                </div>
+                <ul class="submenu">
+            
+                    <li class="submenu-item" data-section="Ипотека" data-group="Масштаб рынка">
+                        <span>Масштаб рынка</span>
+                    </li>
+                
+                    <li class="submenu-item" data-section="Ипотека" data-group="Кредитный портфель">
+                        <span>Кредитный портфель</span>
+                    </li>
+                
+                    <li class="submenu-item" data-section="Ипотека" data-group="Операционная активность">
+                        <span>Операционная активность</span>
+                    </li>
+                
+                    <li class="submenu-item" data-section="Ипотека" data-group="Условия кредитрования">
+                        <span>Условия кредитрования</span>
+                    </li>
+                
+                    <li class="submenu-item" data-section="Ипотека" data-group="Рыночные условия">
+                        <span>Рыночные условия</span>
+                    </li>
+                
+                </ul>
+            </li>
+            
+        </ul>
+        <div class="qr-code-container">
+            <img src="qqr.png" alt="QR код">
+        </div>
+    </aside>
+
+    <div class="container">
+        <div class="section-header">
+            <h1 id="current-section">Ипотека > Масштаб рынка</h1>
+        </div>
+
+        <div class="content active" id="content-Ипотека-Масштаб рынка">
+            <div class="dashboard">
+                
+                <div class="kpi-group">
+                    <h3 class="category-title">Количество кредитных организаций</h3>
+                    <div class="kpi-cards">
+                    
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК</div>
+                                    <div class="kpi-period">за 2 кв. 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">230 ед.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-down">▼</span>
+                                        <span>-0.43 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Количество кредитных организаций_ИЖК"
+                                    data-category="Количество кредитных организаций"
+                                    data-subcategory="ИЖК"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК по ДДУ</div>
+                                    <div class="kpi-period">за 2 кв. 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">85 ед.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-down">▼</span>
+                                        <span>-2.3 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Количество кредитных организаций_ИЖК по ДДУ"
+                                    data-category="Количество кредитных организаций"
+                                    data-subcategory="ИЖК по ДДУ"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК на цели ИЖС</div>
+                                    <div class="kpi-period">за 2 кв. 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">125 ед.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-down">▼</span>
+                                        <span>-1.57 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Количество кредитных организаций_ИЖК на цели ИЖС"
+                                    data-category="Количество кредитных организаций"
+                                    data-subcategory="ИЖК на цели ИЖС"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">Льготная ипотека</div>
+                                    <div class="kpi-period">за 2 кв. 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">47 ед.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-down">▼</span>
+                                        <span>-2.08 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Количество кредитных организаций_Льготная ипотека"
+                                    data-category="Количество кредитных организаций"
+                                    data-subcategory="Льготная ипотека"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                    </div>
+                </div>
+                        
+            </div>
+        </div>
+                
+        <div class="content " id="content-Ипотека-Кредитный портфель">
+            <div class="dashboard">
+                
+                <div class="kpi-group">
+                    <h3 class="category-title">Остаток ссудной задолженности</h3>
+                    <div class="kpi-cards">
+                    
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК</div>
+                                    <div class="kpi-period">01.09.25</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">19.70 трлн руб.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+1.15 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Остаток ссудной задолженности_ИЖК"
+                                    data-category="Остаток ссудной задолженности"
+                                    data-subcategory="ИЖК"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК по ДДУ</div>
+                                    <div class="kpi-period">01.09.25</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">4.23 трлн руб.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-down">▼</span>
+                                        <span>-0.03 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Остаток ссудной задолженности_ИЖК по ДДУ"
+                                    data-category="Остаток ссудной задолженности"
+                                    data-subcategory="ИЖК по ДДУ"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                    </div>
+                </div>
+                        
+                <div class="kpi-group">
+                    <h3 class="category-title">Прирост задолженности по ИЖК, г/г</h3>
+                    <div class="kpi-cards">
+                    
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">В рублях</div>
+                                    <div class="kpi-period">01.08.25</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">3.1 %</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-down">▼</span>
+                                        <span>-0.2 п.п.</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Прирост задолженности по ИЖК, г/г_В рублях"
+                                    data-category="Прирост задолженности по ИЖК, г/г"
+                                    data-subcategory="В рублях"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">В иностранной валюте</div>
+                                    <div class="kpi-period">01.08.25</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">-26.9 %</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+2.7 п.п.</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Прирост задолженности по ИЖК, г/г_В иностранной валюте"
+                                    data-category="Прирост задолженности по ИЖК, г/г"
+                                    data-subcategory="В иностранной валюте"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">Всего</div>
+                                    <div class="kpi-period">01.08.25</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">3.1 %</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-down">▼</span>
+                                        <span>-0.2 п.п.</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Прирост задолженности по ИЖК, г/г_Всего"
+                                    data-category="Прирост задолженности по ИЖК, г/г"
+                                    data-subcategory="Всего"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                    </div>
+                </div>
+                        
+                <div class="kpi-group">
+                    <h3 class="category-title">Просроченная задолженность</h3>
+                    <div class="kpi-cards">
+                    
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК</div>
+                                    <div class="kpi-period">01.09.25</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">168.82 млрд руб.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+6.86 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Просроченная задолженность_ИЖК"
+                                    data-category="Просроченная задолженность"
+                                    data-subcategory="ИЖК"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК по ДДУ</div>
+                                    <div class="kpi-period">01.09.25</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">15.34 млрд руб.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+6.2 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Просроченная задолженность_ИЖК по ДДУ"
+                                    data-category="Просроченная задолженность"
+                                    data-subcategory="ИЖК по ДДУ"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                    </div>
+                </div>
+                        
+                <div class="kpi-group">
+                    <h3 class="category-title">Качество портфеля ИЖК</h3>
+                    <div class="kpi-cards">
+                    
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">В рублях</div>
+                                    <div class="kpi-period">01.08.25</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">0.8 %</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+0.1 п.п.</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Качество портфеля ИЖК_В рублях"
+                                    data-category="Качество портфеля ИЖК"
+                                    data-subcategory="В рублях"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">В иностранной валюте</div>
+                                    <div class="kpi-period">01.08.25</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">42.5 %</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+0.4 п.п.</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Качество портфеля ИЖК_В иностранной валюте"
+                                    data-category="Качество портфеля ИЖК"
+                                    data-subcategory="В иностранной валюте"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">Всего</div>
+                                    <div class="kpi-period">01.08.25</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">0.8 %</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+0.1 п.п.</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Качество портфеля ИЖК_Всего"
+                                    data-category="Качество портфеля ИЖК"
+                                    data-subcategory="Всего"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                    </div>
+                </div>
+                        
+            </div>
+        </div>
+                
+        <div class="content " id="content-Ипотека-Операционная активность">
+            <div class="dashboard">
+                
+                <div class="kpi-group">
+                    <h3 class="category-title">Объем выданных кредитов</h3>
+                    <div class="kpi-cards">
+                    
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК</div>
+                                    <div class="kpi-period">август 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">392.26 млрд руб.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+10.22 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Объем выданных кредитов_ИЖК"
+                                    data-category="Объем выданных кредитов"
+                                    data-subcategory="ИЖК"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК по ДДУ</div>
+                                    <div class="kpi-period">август 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">222.91 млрд руб.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+12.93 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Объем выданных кредитов_ИЖК по ДДУ"
+                                    data-category="Объем выданных кредитов"
+                                    data-subcategory="ИЖК по ДДУ"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК на цели ИЖС</div>
+                                    <div class="kpi-period">01.09.25</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">60.49 млрд руб.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+0.3 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Объем выданных кредитов_ИЖК на цели ИЖС"
+                                    data-category="Объем выданных кредитов"
+                                    data-subcategory="ИЖК на цели ИЖС"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">Льготная ипотека</div>
+                                    <div class="kpi-period">янв – авг 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">2.25 трлн руб.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+21.16 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Объем выданных кредитов_Льготная ипотека"
+                                    data-category="Объем выданных кредитов"
+                                    data-subcategory="Льготная ипотека"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                    </div>
+                </div>
+                        
+                <div class="kpi-group">
+                    <h3 class="category-title">Прирост объема новых ИЖК, г/г</h3>
+                    <div class="kpi-cards">
+                    
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">В рублях</div>
+                                    <div class="kpi-period">июль 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">0.0 %</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+60.8 п.п.</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Прирост объема новых ИЖК, г/г_В рублях"
+                                    data-category="Прирост объема новых ИЖК, г/г"
+                                    data-subcategory="В рублях"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                    </div>
+                </div>
+                        
+                <div class="kpi-group">
+                    <h3 class="category-title">Количество выданных кредитов</h3>
+                    <div class="kpi-cards">
+                    
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК</div>
+                                    <div class="kpi-period">август 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">85 092 ед.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+9.85 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Количество выданных кредитов_ИЖК"
+                                    data-category="Количество выданных кредитов"
+                                    data-subcategory="ИЖК"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК по ДДУ</div>
+                                    <div class="kpi-period">август 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">38 639 ед.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+12.16 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Количество выданных кредитов_ИЖК по ДДУ"
+                                    data-category="Количество выданных кредитов"
+                                    data-subcategory="ИЖК по ДДУ"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК на цели ИЖС</div>
+                                    <div class="kpi-period">01.09.25</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">13 934 ед.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-down">▼</span>
+                                        <span>-0.67 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Количество выданных кредитов_ИЖК на цели ИЖС"
+                                    data-category="Количество выданных кредитов"
+                                    data-subcategory="ИЖК на цели ИЖС"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">Льготная ипотека</div>
+                                    <div class="kpi-period">янв – авг 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">0.50 млн ед.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+20.39 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Количество выданных кредитов_Льготная ипотека"
+                                    data-category="Количество выданных кредитов"
+                                    data-subcategory="Льготная ипотека"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                    </div>
+                </div>
+                        
+                <div class="kpi-group">
+                    <h3 class="category-title">Прирост количества ИЖК, г/г</h3>
+                    <div class="kpi-cards">
+                    
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">В рублях</div>
+                                    <div class="kpi-period">июль 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">-27.7 %</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+38.4 п.п.</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Прирост количества ИЖК, г/г_В рублях"
+                                    data-category="Прирост количества ИЖК, г/г"
+                                    data-subcategory="В рублях"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                    </div>
+                </div>
+                        
+                <div class="kpi-group">
+                    <h3 class="category-title">Доля ИЖК в выданных кредитах</h3>
+                    <div class="kpi-cards">
+                    
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">В рублях</div>
+                                    <div class="kpi-period">июль 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">18.1 %</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+1.1 п.п.</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Доля ИЖК в выданных кредитах_В рублях"
+                                    data-category="Доля ИЖК в выданных кредитах"
+                                    data-subcategory="В рублях"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">В иностранной валюте</div>
+                                    <div class="kpi-period">июль 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">0.0 %</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-down">►</span>
+                                        <span>0.0 п.п.</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Доля ИЖК в выданных кредитах_В иностранной валюте"
+                                    data-category="Доля ИЖК в выданных кредитах"
+                                    data-subcategory="В иностранной валюте"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">Всего</div>
+                                    <div class="kpi-period">июль 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">18.1 %</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+1.1 п.п.</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Доля ИЖК в выданных кредитах_Всего"
+                                    data-category="Доля ИЖК в выданных кредитах"
+                                    data-subcategory="Всего"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                    </div>
+                </div>
+                        
+            </div>
+        </div>
+                
+        <div class="content " id="content-Ипотека-Условия кредитрования">
+            <div class="dashboard">
+                
+                <div class="kpi-group">
+                    <h3 class="category-title">Средний размер кредита</h3>
+                    <div class="kpi-cards">
+                    
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК (без иностранной валюты)</div>
+                                    <div class="kpi-period">август 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">4.61 млн руб.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+0.34 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Средний размер кредита_ИЖК (без иностранной валюты)"
+                                    data-category="Средний размер кредита"
+                                    data-subcategory="ИЖК (без иностранной валюты)"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК по ДДУ (без иностранной валюты)</div>
+                                    <div class="kpi-period">август 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">5.77 млн руб.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+0.69 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Средний размер кредита_ИЖК по ДДУ (без иностранной валюты)"
+                                    data-category="Средний размер кредита"
+                                    data-subcategory="ИЖК по ДДУ (без иностранной валюты)"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                    </div>
+                </div>
+                        
+                <div class="kpi-group">
+                    <h3 class="category-title">Средний срок кредитования</h3>
+                    <div class="kpi-cards">
+                    
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК (без иностранной валюты)</div>
+                                    <div class="kpi-period">август 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">307.0 мес.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-down">▼</span>
+                                        <span>-0.16 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Средний срок кредитования_ИЖК (без иностранной валюты)"
+                                    data-category="Средний срок кредитования"
+                                    data-subcategory="ИЖК (без иностранной валюты)"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК по ДДУ (без иностранной валюты)</div>
+                                    <div class="kpi-period">август 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">323.8 мес.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+0.19 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Средний срок кредитования_ИЖК по ДДУ (без иностранной валюты)"
+                                    data-category="Средний срок кредитования"
+                                    data-subcategory="ИЖК по ДДУ (без иностранной валюты)"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК на цели ИЖС</div>
+                                    <div class="kpi-period">август 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">310.3 мес.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+0.13 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Средний срок кредитования_ИЖК на цели ИЖС"
+                                    data-category="Средний срок кредитования"
+                                    data-subcategory="ИЖК на цели ИЖС"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                    </div>
+                </div>
+                        
+                <div class="kpi-group">
+                    <h3 class="category-title">Средняя ставка по кредитам</h3>
+                    <div class="kpi-cards">
+                    
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК (без иностранной валюты)</div>
+                                    <div class="kpi-period">август 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">7.58 %</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+0.12 п.п.</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Средняя ставка по кредитам_ИЖК (без иностранной валюты)"
+                                    data-category="Средняя ставка по кредитам"
+                                    data-subcategory="ИЖК (без иностранной валюты)"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК по ДДУ (без иностранной валюты)</div>
+                                    <div class="kpi-period">август 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">6.08 %</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+0.08 п.п.</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Средняя ставка по кредитам_ИЖК по ДДУ (без иностранной валюты)"
+                                    data-category="Средняя ставка по кредитам"
+                                    data-subcategory="ИЖК по ДДУ (без иностранной валюты)"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">ИЖК на цели ИЖС</div>
+                                    <div class="kpi-period">август 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">7.44 %</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-down">▼</span>
+                                        <span>-0.04 п.п.</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Средняя ставка по кредитам_ИЖК на цели ИЖС"
+                                    data-category="Средняя ставка по кредитам"
+                                    data-subcategory="ИЖК на цели ИЖС"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                    </div>
+                </div>
+                        
+            </div>
+        </div>
+                
+        <div class="content " id="content-Ипотека-Рыночные условия">
+            <div class="dashboard">
+                
+                <div class="kpi-group">
+                    <h3 class="category-title">Средняя цена на 1 кв. м. </h3>
+                    <div class="kpi-cards">
+                    
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">Первичный рынок</div>
+                                    <div class="kpi-period">за 2 кв. 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">205 тыс руб.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+1.56 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Средняя цена на 1 кв. м. _Первичный рынок"
+                                    data-category="Средняя цена на 1 кв. м. "
+                                    data-subcategory="Первичный рынок"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                            <div class="kpi-card">
+                                <div class="kpi-header">
+                                    <div class="kpi-subcategory">Вторичный рынок</div>
+                                    <div class="kpi-period">за 2 кв. 2025</div>
+                                </div>
+
+                                <div class="kpi-main">
+                                    <div class="kpi-value">128 тыс руб.</div>
+                                    <div class="kpi-change-container">
+                                        <span class="trend-up">▲</span>
+                                        <span>+1.18 %</span>
+                                    </div>
+                                </div>
+
+                                <button class="detail-btn" data-key="Средняя цена на 1 кв. м. _Вторичный рынок"
+                                    data-category="Средняя цена на 1 кв. м. "
+                                    data-subcategory="Вторичный рынок"
+                                    title="Детализация">
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span class="btn-text">Детализация</span>
+                                </button>
+                            </div>
+                            
+                    </div>
+                </div>
+                        
+            </div>
+        </div>
+                
+        <div class="footer">
+            <p>Источник: <strong>cbr.ru</strong></p>
+        </div>
+    </div>
+
+    <!-- Детализация показателя -->
+    <div id="detail-view" class="detail-view hidden">
+        <div class="detail-header">
+            <button id="back-btn" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Назад
+            </button>
+            <div class="detail-header-content">
+                <h2 id="detail-title"></h2>
+                <div id="detail-comment" class="detail-comment"></div>
+            </div>
+        </div>
+
+        <div class="detail-content">
+            <div class="date-range-info">
+                <span id="date-range-text"></span>
+            </div>
+
+            <div class="date-filters">
+                <div class="date-filter">
+                    <label for="start-date"><i class="far fa-calendar-alt"></i> Начало:</label>
+                    <input type="date" id="start-date" class="date-input">
+                </div>
+                <div class="date-filter">
+                    <label for="end-date"><i class="far fa-calendar-alt"></i> Конец:</label>
+                    <input type="date" id="end-date" class="date-input">
+                </div>
+            </div>
+
+            <!-- Контейнеры для графиков и таблиц -->
+            <div class="chart-container">
+                <canvas id="detail-chart"></canvas>
+            </div>
+
+            <div id="pre-2025-table-container" class="table-container hidden"></div>
+
+            <div class="chart-container hidden" id="premium-chart-container">
+                <canvas id="premium-chart"></canvas>
+            </div>
+
+            <div id="post-2025-table-container" class="table-container hidden"></div>
+        </div>
+    </div>
+
+    <script>Telegram.WebApp.expand();
+    Telegram.WebApp.enableClosingConfirmation();</script>
+    <script src="script.js"></script>
     <script>
-        function openDashboard() {
-            window.open(
-                "https://vm-f0f0f249.na4u.ru/superset/dashboard/14/", 
-                "_blank"
-            );
-        }
+        // Передаем исторические данные в JavaScript
+        const historicalData = {"Прирост количества ИЖК, г/г_В рублях": [{"date": "2025-07-01", "value": -27.7, "unit": "%", "comm_": "за месяц"}, {"date": "2025-06-01", "value": -66.1, "unit": "%", "comm_": "за месяц"}, {"date": "2025-05-01", "value": -56.9, "unit": "%", "comm_": "за месяц"}, {"date": "2025-04-01", "value": -47.1, "unit": "%", "comm_": "за месяц"}, {"date": "2025-03-01", "value": -50.6, "unit": "%", "comm_": "за месяц"}, {"date": "2025-02-01", "value": -45.0, "unit": "%", "comm_": "за месяц"}, {"date": "2025-01-01", "value": -57.5, "unit": "%", "comm_": "за месяц"}, {"date": "2024-12-01", "value": -62.7, "unit": "%", "comm_": "за месяц"}, {"date": "2024-11-01", "value": -61.8, "unit": "%", "comm_": "за месяц"}, {"date": "2024-10-01", "value": -52.6, "unit": "%", "comm_": "за месяц"}, {"date": "2024-09-01", "value": -60.4, "unit": "%", "comm_": "за месяц"}, {"date": "2024-08-01", "value": -53.7, "unit": "%", "comm_": "за месяц"}, {"date": "2024-07-01", "value": -37.2, "unit": "%", "comm_": "за месяц"}, {"date": "2024-06-01", "value": 20.6, "unit": "%", "comm_": "за месяц"}, {"date": "2024-05-01", "value": -7.1, "unit": "%", "comm_": "за месяц"}, {"date": "2024-04-01", "value": -19.6, "unit": "%", "comm_": "за месяц"}, {"date": "2024-03-01", "value": -24.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-02-01", "value": -16.6, "unit": "%", "comm_": "за месяц"}, {"date": "2024-01-01", "value": -1.8, "unit": "%", "comm_": "за месяц"}, {"date": "2023-12-01", "value": 11.7, "unit": "%", "comm_": "за месяц"}, {"date": "2023-11-01", "value": 46.8, "unit": "%", "comm_": "за месяц"}, {"date": "2023-10-01", "value": 57.4, "unit": "%", "comm_": "за месяц"}, {"date": "2023-09-01", "value": 74.4, "unit": "%", "comm_": "за месяц"}, {"date": "2023-08-01", "value": 77.3, "unit": "%", "comm_": "за месяц"}, {"date": "2023-07-01", "value": 86.2, "unit": "%", "comm_": "за месяц"}, {"date": "2023-06-01", "value": 156.5, "unit": "%", "comm_": "за месяц"}, {"date": "2023-05-01", "value": 331.2, "unit": "%", "comm_": "за месяц"}, {"date": "2023-04-01", "value": 210.6, "unit": "%", "comm_": "за месяц"}, {"date": "2023-03-01", "value": -5.4, "unit": "%", "comm_": "за месяц"}, {"date": "2023-02-01", "value": -15.5, "unit": "%", "comm_": "за месяц"}, {"date": "2023-01-01", "value": -18.6, "unit": "%", "comm_": "за месяц"}], "Прирост объема новых ИЖК, г/г_В рублях": [{"date": "2025-07-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2025-06-01", "value": -60.8, "unit": "%", "comm_": "за месяц"}, {"date": "2025-05-01", "value": -47.3, "unit": "%", "comm_": "за месяц"}, {"date": "2025-04-01", "value": -37.7, "unit": "%", "comm_": "за месяц"}, {"date": "2025-03-01", "value": -42.5, "unit": "%", "comm_": "за месяц"}, {"date": "2025-02-01", "value": -31.8, "unit": "%", "comm_": "за месяц"}, {"date": "2025-01-01", "value": -53.3, "unit": "%", "comm_": "за месяц"}, {"date": "2024-12-01", "value": -62.9, "unit": "%", "comm_": "за месяц"}, {"date": "2024-11-01", "value": -62.2, "unit": "%", "comm_": "за месяц"}, {"date": "2024-10-01", "value": -52.3, "unit": "%", "comm_": "за месяц"}, {"date": "2024-09-01", "value": -61.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-08-01", "value": -55.8, "unit": "%", "comm_": "за месяц"}, {"date": "2024-07-01", "value": -44.9, "unit": "%", "comm_": "за месяц"}, {"date": "2024-06-01", "value": 25.8, "unit": "%", "comm_": "за месяц"}, {"date": "2024-05-01", "value": -6.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-04-01", "value": -17.7, "unit": "%", "comm_": "за месяц"}, {"date": "2024-03-01", "value": -21.4, "unit": "%", "comm_": "за месяц"}, {"date": "2024-02-01", "value": -21.2, "unit": "%", "comm_": "за месяц"}, {"date": "2024-01-01", "value": -3.5, "unit": "%", "comm_": "за месяц"}, {"date": "2023-12-01", "value": 12.7, "unit": "%", "comm_": "за месяц"}, {"date": "2023-11-01", "value": 54.3, "unit": "%", "comm_": "за месяц"}, {"date": "2023-10-01", "value": 71.7, "unit": "%", "comm_": "за месяц"}, {"date": "2023-09-01", "value": 84.4, "unit": "%", "comm_": "за месяц"}, {"date": "2023-08-01", "value": 85.5, "unit": "%", "comm_": "за месяц"}, {"date": "2023-07-01", "value": 89.2, "unit": "%", "comm_": "за месяц"}, {"date": "2023-06-01", "value": 147.3, "unit": "%", "comm_": "за месяц"}, {"date": "2023-05-01", "value": 315.5, "unit": "%", "comm_": "за месяц"}, {"date": "2023-04-01", "value": 250.4, "unit": "%", "comm_": "за месяц"}, {"date": "2023-03-01", "value": 9.2, "unit": "%", "comm_": "за месяц"}, {"date": "2023-02-01", "value": -11.4, "unit": "%", "comm_": "за месяц"}, {"date": "2023-01-01", "value": -13.9, "unit": "%", "comm_": "за месяц"}], "Прирост задолженности по ИЖК, г/г_В рублях": [{"date": "2025-08-01", "value": 3.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-07-01", "value": 3.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-06-01", "value": 6.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-05-01", "value": 7.0, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-04-01", "value": 7.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-03-01", "value": 8.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-02-01", "value": 9.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-01-01", "value": 10.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-12-01", "value": 11.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-11-01", "value": 13.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-10-01", "value": 15.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-09-01", "value": 20.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-08-01", "value": 24.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-07-01", "value": 26.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-06-01", "value": 25.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-05-01", "value": 26.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-04-01", "value": 27.2, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-03-01", "value": 28.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-02-01", "value": 29.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-01-01", "value": 29.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-12-01", "value": 30.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-11-01", "value": 29.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-10-01", "value": 28.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-09-01", "value": 26.2, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-08-01", "value": 22.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-07-01", "value": 22.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-06-01", "value": 20.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-05-01", "value": 18.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-04-01", "value": 15.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-03-01", "value": 15.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-02-01", "value": 16.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-01-01", "value": 17.1, "unit": "%", "comm_": "на отчетную дату"}], "Прирост задолженности по ИЖК, г/г_Всего": [{"date": "2025-08-01", "value": 3.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-07-01", "value": 3.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-06-01", "value": 6.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-05-01", "value": 6.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-04-01", "value": 7.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-03-01", "value": 8.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-02-01", "value": 9.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-01-01", "value": 10.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-12-01", "value": 11.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-11-01", "value": 13.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-10-01", "value": 15.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-09-01", "value": 20.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-08-01", "value": 24.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-07-01", "value": 26.2, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-06-01", "value": 25.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-05-01", "value": 26.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-04-01", "value": 27.2, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-03-01", "value": 28.2, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-02-01", "value": 29.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-01-01", "value": 29.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-12-01", "value": 30.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-11-01", "value": 29.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-10-01", "value": 28.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-09-01", "value": 26.2, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-08-01", "value": 22.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-07-01", "value": 22.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-06-01", "value": 20.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-05-01", "value": 18.0, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-04-01", "value": 15.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-03-01", "value": 15.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-02-01", "value": 16.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-01-01", "value": 17.0, "unit": "%", "comm_": "на отчетную дату"}], "Прирост задолженности по ИЖК, г/г_В иностранной валюте": [{"date": "2025-08-01", "value": -26.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-07-01", "value": -29.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-06-01", "value": -32.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-05-01", "value": -36.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-04-01", "value": -34.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-03-01", "value": -31.7, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-02-01", "value": -22.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-01-01", "value": -24.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-12-01", "value": -15.7, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-11-01", "value": -25.2, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-10-01", "value": -33.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-09-01", "value": -33.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-08-01", "value": -33.2, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-07-01", "value": -32.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-06-01", "value": -23.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-05-01", "value": -17.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-04-01", "value": -13.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-03-01", "value": -11.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-02-01", "value": -7.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-01-01", "value": -5.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-12-01", "value": 4.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-11-01", "value": 8.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-10-01", "value": 24.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-09-01", "value": 12.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-08-01", "value": 3.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-07-01", "value": 14.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-06-01", "value": -35.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-05-01", "value": -42.7, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-04-01", "value": -54.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-03-01", "value": -56.2, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-02-01", "value": -56.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-01-01", "value": -54.0, "unit": "%", "comm_": "на отчетную дату"}], "Доля ИЖК в выданных кредитах_В рублях": [{"date": "2025-07-01", "value": 18.1, "unit": "%", "comm_": "за месяц"}, {"date": "2025-06-01", "value": 17.0, "unit": "%", "comm_": "за месяц"}, {"date": "2025-05-01", "value": 16.3, "unit": "%", "comm_": "за месяц"}, {"date": "2025-04-01", "value": 16.9, "unit": "%", "comm_": "за месяц"}, {"date": "2025-03-01", "value": 15.1, "unit": "%", "comm_": "за месяц"}, {"date": "2025-02-01", "value": 15.2, "unit": "%", "comm_": "за месяц"}, {"date": "2025-01-01", "value": 9.2, "unit": "%", "comm_": "за месяц"}, {"date": "2024-12-01", "value": 13.8, "unit": "%", "comm_": "за месяц"}, {"date": "2024-11-01", "value": 16.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-10-01", "value": 18.6, "unit": "%", "comm_": "за месяц"}, {"date": "2024-09-01", "value": 17.5, "unit": "%", "comm_": "за месяц"}, {"date": "2024-08-01", "value": 16.4, "unit": "%", "comm_": "за месяц"}, {"date": "2024-07-01", "value": 15.3, "unit": "%", "comm_": "за месяц"}, {"date": "2024-06-01", "value": 26.3, "unit": "%", "comm_": "за месяц"}, {"date": "2024-05-01", "value": 20.1, "unit": "%", "comm_": "за месяц"}, {"date": "2024-04-01", "value": 19.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-03-01", "value": 18.5, "unit": "%", "comm_": "за месяц"}, {"date": "2024-02-01", "value": 17.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-01-01", "value": 15.8, "unit": "%", "comm_": "за месяц"}, {"date": "2023-12-01", "value": 32.6, "unit": "%", "comm_": "за месяц"}, {"date": "2023-11-01", "value": 31.2, "unit": "%", "comm_": "за месяц"}, {"date": "2023-10-01", "value": 31.6, "unit": "%", "comm_": "за месяц"}, {"date": "2023-09-01", "value": 37.1, "unit": "%", "comm_": "за месяц"}, {"date": "2023-08-01", "value": 32.0, "unit": "%", "comm_": "за месяц"}, {"date": "2023-07-01", "value": 28.0, "unit": "%", "comm_": "за месяц"}, {"date": "2023-06-01", "value": 28.5, "unit": "%", "comm_": "за месяц"}, {"date": "2023-05-01", "value": 27.1, "unit": "%", "comm_": "за месяц"}, {"date": "2023-04-01", "value": 28.2, "unit": "%", "comm_": "за месяц"}, {"date": "2023-03-01", "value": 27.6, "unit": "%", "comm_": "за месяц"}, {"date": "2023-02-01", "value": 26.3, "unit": "%", "comm_": "за месяц"}, {"date": "2023-01-01", "value": 20.1, "unit": "%", "comm_": "за месяц"}], "Доля ИЖК в выданных кредитах_Всего": [{"date": "2025-07-01", "value": 18.1, "unit": "%", "comm_": "за месяц"}, {"date": "2025-06-01", "value": 17.0, "unit": "%", "comm_": "за месяц"}, {"date": "2025-05-01", "value": 16.3, "unit": "%", "comm_": "за месяц"}, {"date": "2025-04-01", "value": 16.9, "unit": "%", "comm_": "за месяц"}, {"date": "2025-03-01", "value": 15.1, "unit": "%", "comm_": "за месяц"}, {"date": "2025-02-01", "value": 15.2, "unit": "%", "comm_": "за месяц"}, {"date": "2025-01-01", "value": 9.2, "unit": "%", "comm_": "за месяц"}, {"date": "2024-12-01", "value": 13.8, "unit": "%", "comm_": "за месяц"}, {"date": "2024-11-01", "value": 16.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-10-01", "value": 18.6, "unit": "%", "comm_": "за месяц"}, {"date": "2024-09-01", "value": 17.5, "unit": "%", "comm_": "за месяц"}, {"date": "2024-08-01", "value": 16.4, "unit": "%", "comm_": "за месяц"}, {"date": "2024-07-01", "value": 15.3, "unit": "%", "comm_": "за месяц"}, {"date": "2024-06-01", "value": 26.3, "unit": "%", "comm_": "за месяц"}, {"date": "2024-05-01", "value": 20.1, "unit": "%", "comm_": "за месяц"}, {"date": "2024-04-01", "value": 19.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-03-01", "value": 18.5, "unit": "%", "comm_": "за месяц"}, {"date": "2024-02-01", "value": 17.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-01-01", "value": 15.8, "unit": "%", "comm_": "за месяц"}, {"date": "2023-12-01", "value": 32.6, "unit": "%", "comm_": "за месяц"}, {"date": "2023-11-01", "value": 31.2, "unit": "%", "comm_": "за месяц"}, {"date": "2023-10-01", "value": 31.6, "unit": "%", "comm_": "за месяц"}, {"date": "2023-09-01", "value": 37.1, "unit": "%", "comm_": "за месяц"}, {"date": "2023-08-01", "value": 32.0, "unit": "%", "comm_": "за месяц"}, {"date": "2023-07-01", "value": 28.0, "unit": "%", "comm_": "за месяц"}, {"date": "2023-06-01", "value": 28.5, "unit": "%", "comm_": "за месяц"}, {"date": "2023-05-01", "value": 27.1, "unit": "%", "comm_": "за месяц"}, {"date": "2023-04-01", "value": 28.2, "unit": "%", "comm_": "за месяц"}, {"date": "2023-03-01", "value": 27.6, "unit": "%", "comm_": "за месяц"}, {"date": "2023-02-01", "value": 26.3, "unit": "%", "comm_": "за месяц"}, {"date": "2023-01-01", "value": 20.1, "unit": "%", "comm_": "за месяц"}], "Доля ИЖК в выданных кредитах_В иностранной валюте": [{"date": "2025-07-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2025-06-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2025-05-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2025-04-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2025-03-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2025-02-01", "value": 24.4, "unit": "%", "comm_": "за месяц"}, {"date": "2025-01-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-12-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-11-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-10-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-09-01", "value": 33.9, "unit": "%", "comm_": "за месяц"}, {"date": "2024-08-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-07-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-06-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-05-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-04-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-03-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-02-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2024-01-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2023-12-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2023-11-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2023-10-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2023-09-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2023-08-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2023-07-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2023-06-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2023-05-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2023-04-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2023-03-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2023-02-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}, {"date": "2023-01-01", "value": 0.0, "unit": "%", "comm_": "за месяц"}], "Доля ИЖК в задолженности по кредитам _В рублях": [{"date": "2025-08-01", "value": 58.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-07-01", "value": 58.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-06-01", "value": 58.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-05-01", "value": 58.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-04-01", "value": 58.0, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-03-01", "value": 57.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-02-01", "value": 57.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-01-01", "value": 57.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-12-01", "value": 56.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-11-01", "value": 54.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-10-01", "value": 54.2, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-09-01", "value": 54.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-08-01", "value": 54.7, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-07-01", "value": 54.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-06-01", "value": 54.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-05-01", "value": 54.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-04-01", "value": 54.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-03-01", "value": 54.7, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-02-01", "value": 54.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-01-01", "value": 54.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-12-01", "value": 54.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-11-01", "value": 53.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-10-01", "value": 53.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-09-01", "value": 53.0, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-08-01", "value": 52.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-07-01", "value": 53.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-06-01", "value": 53.0, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-05-01", "value": 52.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-04-01", "value": 52.7, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-03-01", "value": 52.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-02-01", "value": 52.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-01-01", "value": 52.4, "unit": "%", "comm_": "на отчетную дату"}], "Доля ИЖК в задолженности по кредитам _Всего": [{"date": "2025-08-01", "value": 58.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-07-01", "value": 58.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-06-01", "value": 58.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-05-01", "value": 58.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-04-01", "value": 58.0, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-03-01", "value": 57.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-02-01", "value": 57.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-01-01", "value": 57.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-12-01", "value": 56.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-11-01", "value": 54.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-10-01", "value": 54.2, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-09-01", "value": 54.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-08-01", "value": 54.7, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-07-01", "value": 54.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-06-01", "value": 54.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-05-01", "value": 54.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-04-01", "value": 54.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-03-01", "value": 54.7, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-02-01", "value": 54.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-01-01", "value": 54.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-12-01", "value": 54.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-11-01", "value": 53.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-10-01", "value": 53.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-09-01", "value": 53.0, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-08-01", "value": 52.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-07-01", "value": 53.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-06-01", "value": 53.0, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-05-01", "value": 52.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-04-01", "value": 52.7, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-03-01", "value": 52.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-02-01", "value": 52.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-01-01", "value": 52.4, "unit": "%", "comm_": "на отчетную дату"}], "Доля ИЖК в задолженности по кредитам _В иностранной валюте": [{"date": "2025-08-01", "value": 33.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-07-01", "value": 33.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-06-01", "value": 33.7, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-05-01", "value": 33.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-04-01", "value": 34.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-03-01", "value": 35.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-02-01", "value": 35.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-01-01", "value": 34.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-12-01", "value": 38.2, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-11-01", "value": 38.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-10-01", "value": 37.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-09-01", "value": 37.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-08-01", "value": 37.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-07-01", "value": 37.2, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-06-01", "value": 37.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-05-01", "value": 39.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-04-01", "value": 39.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-03-01", "value": 40.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-02-01", "value": 40.0, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-01-01", "value": 42.0, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-12-01", "value": 41.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-11-01", "value": 41.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-10-01", "value": 42.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-09-01", "value": 42.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-08-01", "value": 41.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-07-01", "value": 41.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-06-01", "value": 40.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-05-01", "value": 39.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-04-01", "value": 39.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-03-01", "value": 40.7, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-02-01", "value": 41.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-01-01", "value": 41.4, "unit": "%", "comm_": "на отчетную дату"}], "Количество кредитных организаций_ИЖК": [{"date": "2025-04-01", "value": 230.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2025-01-01", "value": 231.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2024-10-01", "value": 236.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2024-07-01", "value": 238.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2024-04-01", "value": 241.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2024-01-01", "value": 243.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2023-10-01", "value": 244.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2023-07-01", "value": 246.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2023-04-01", "value": 249.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2023-01-01", "value": 245.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2022-10-01", "value": 243.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2022-07-01", "value": 247.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2022-04-01", "value": 247.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2022-01-01", "value": 251.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2021-10-01", "value": 260.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2021-07-01", "value": 265.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2021-04-01", "value": 270.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2021-01-01", "value": 277.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2020-10-01", "value": 280.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2020-07-01", "value": 289.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2020-04-01", "value": 298.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2020-01-01", "value": 303.0, "unit": "ед.", "comm_": "за квартал"}], "Качество портфеля ИЖК_В рублях": [{"date": "2025-08-01", "value": 0.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-07-01", "value": 0.7, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-06-01", "value": 0.7, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-05-01", "value": 0.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-04-01", "value": 0.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-03-01", "value": 0.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-02-01", "value": 0.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-01-01", "value": 0.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-12-01", "value": 0.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-11-01", "value": 0.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-10-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-09-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-08-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-07-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-06-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-05-01", "value": 0.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-04-01", "value": 0.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-03-01", "value": 0.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-02-01", "value": 0.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-01-01", "value": 0.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-12-01", "value": 0.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-11-01", "value": 0.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-10-01", "value": 0.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-09-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-08-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-07-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-06-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-05-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-04-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-03-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-02-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-01-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}], "Качество портфеля ИЖК_Всего": [{"date": "2025-08-01", "value": 0.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-07-01", "value": 0.7, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-06-01", "value": 0.7, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-05-01", "value": 0.7, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-04-01", "value": 0.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-03-01", "value": 0.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-02-01", "value": 0.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-01-01", "value": 0.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-12-01", "value": 0.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-11-01", "value": 0.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-10-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-09-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-08-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-07-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-06-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-05-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-04-01", "value": 0.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-03-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-02-01", "value": 0.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-01-01", "value": 0.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-12-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-11-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-10-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-09-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-08-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-07-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-06-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-05-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-04-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-03-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-02-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-01-01", "value": 0.4, "unit": "%", "comm_": "на отчетную дату"}], "Качество портфеля ИЖК_В иностранной валюте": [{"date": "2025-08-01", "value": 42.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-07-01", "value": 42.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-06-01", "value": 41.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-05-01", "value": 41.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-04-01", "value": 41.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-03-01", "value": 41.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-02-01", "value": 40.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2025-01-01", "value": 41.0, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-12-01", "value": 38.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-11-01", "value": 41.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-10-01", "value": 41.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-09-01", "value": 39.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-08-01", "value": 40.2, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-07-01", "value": 40.0, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-06-01", "value": 39.7, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-05-01", "value": 45.1, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-04-01", "value": 44.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-03-01", "value": 45.0, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-02-01", "value": 44.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2024-01-01", "value": 46.8, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-12-01", "value": 46.9, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-11-01", "value": 46.4, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-10-01", "value": 48.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-09-01", "value": 47.2, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-08-01", "value": 47.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-07-01", "value": 48.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-06-01", "value": 48.3, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-05-01", "value": 49.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-04-01", "value": 49.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-03-01", "value": 49.6, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-02-01", "value": 49.5, "unit": "%", "comm_": "на отчетную дату"}, {"date": "2023-01-01", "value": 49.1, "unit": "%", "comm_": "на отчетную дату"}], "Количество кредитных организаций_ИЖК по ДДУ": [{"date": "2025-04-01", "value": 85.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2025-01-01", "value": 87.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2024-10-01", "value": 92.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2024-07-01", "value": 87.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2024-04-01", "value": 87.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2024-01-01", "value": 87.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2023-10-01", "value": 92.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2023-07-01", "value": 92.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2023-04-01", "value": 91.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2023-01-01", "value": 95.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2022-10-01", "value": 100.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2022-07-01", "value": 100.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2022-04-01", "value": 101.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2022-01-01", "value": 103.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2021-10-01", "value": 105.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2021-07-01", "value": 108.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2021-04-01", "value": 115.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2021-01-01", "value": 118.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2020-10-01", "value": 122.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2020-07-01", "value": 121.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2020-04-01", "value": 121.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2020-01-01", "value": 128.0, "unit": "ед.", "comm_": "за квартал"}], "Количество кредитных организаций_ИЖК на цели ИЖС": [{"date": "2025-04-01", "value": 125.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2025-01-01", "value": 127.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2024-10-01", "value": 56.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2024-07-01", "value": 54.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2024-04-01", "value": 58.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2024-01-01", "value": 53.0, "unit": "ед.", "comm_": "за квартал"}], "Количество кредитных организаций_Льготная ипотека": [{"date": "2025-04-01", "value": 47.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2025-01-01", "value": 48.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2024-10-01", "value": 53.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2024-07-01", "value": 57.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2024-04-01", "value": 59.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2024-01-01", "value": 57.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2023-10-01", "value": 55.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2023-07-01", "value": 52.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2023-04-01", "value": 52.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2023-01-01", "value": 50.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2022-10-01", "value": 51.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2022-07-01", "value": 55.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2022-04-01", "value": 51.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2022-01-01", "value": 52.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2021-10-01", "value": 52.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2021-07-01", "value": 54.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2021-04-01", "value": 56.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2021-01-01", "value": 57.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2020-10-01", "value": 59.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2020-07-01", "value": 60.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2020-04-01", "value": 57.0, "unit": "ед.", "comm_": "за квартал"}, {"date": "2020-01-01", "value": 38.0, "unit": "ед.", "comm_": "за квартал"}], "Остаток ссудной задолженности_ИЖК": [{"date": "2025-09-01", "value": 19702375.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-08-01", "value": 19477431.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-07-01", "value": 19538733.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-06-01", "value": 19462139.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-05-01", "value": 19340120.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-04-01", "value": 19222774.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-03-01", "value": 19148522.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-02-01", "value": 19089680.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-01-01", "value": 19198714.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-12-01", "value": 19123971.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-11-01", "value": 19111326.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-10-01", "value": 19231911.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-09-01", "value": 19289792.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-08-01", "value": 19211672.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-07-01", "value": 19284733.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-06-01", "value": 18767079.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-05-01", "value": 18607122.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-04-01", "value": 18454131.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-03-01", "value": 18225842.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-02-01", "value": 18145171.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-01-01", "value": 18016040.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-12-01", "value": 17727340.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-11-01", "value": 17398358.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-10-01", "value": 16905308.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-09-01", "value": 16236452.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-08-01", "value": 15653569.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-07-01", "value": 15449500.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-06-01", "value": 15085122.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-05-01", "value": 14753194.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-04-01", "value": 14445193.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-03-01", "value": 14144107.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-02-01", "value": 13926821.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-01-01", "value": 13844977.0, "unit": "млн руб.", "comm_": "на отчетную дату"}], "Остаток ссудной задолженности_ИЖК по ДДУ": [{"date": "2025-09-01", "value": 4227052.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-08-01", "value": 4228239.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-07-01", "value": 4275251.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-06-01", "value": 4283390.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-05-01", "value": 4330997.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-04-01", "value": 4363176.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-03-01", "value": 4415358.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-02-01", "value": 4476402.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-01-01", "value": 4584855.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-12-01", "value": 4639505.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-11-01", "value": 4687594.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-10-01", "value": 4730550.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-09-01", "value": 4758029.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-08-01", "value": 4832040.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-07-01", "value": 4965729.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-06-01", "value": 4735645.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-05-01", "value": 4764006.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-04-01", "value": 4732754.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-03-01", "value": 4747972.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-02-01", "value": 4852619.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-01-01", "value": 4923463.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-12-01", "value": 4676304.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-11-01", "value": 4488884.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-10-01", "value": 4288991.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-09-01", "value": 3995071.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-08-01", "value": 3811573.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-07-01", "value": 3710984.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-06-01", "value": 3654513.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-05-01", "value": 3576030.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-04-01", "value": 3525790.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-03-01", "value": 3433614.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-02-01", "value": 3380580.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-01-01", "value": 3389397.0, "unit": "млн руб.", "comm_": "на отчетную дату"}], "Просроченная задолженность_ИЖК": [{"date": "2025-09-01", "value": 168819.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-08-01", "value": 157985.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-07-01", "value": 146271.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-06-01", "value": 136815.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-05-01", "value": 126680.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-04-01", "value": 115804.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-03-01", "value": 109633.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-02-01", "value": 102061.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-01-01", "value": 96407.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-12-01", "value": 93052.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-11-01", "value": 88846.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-10-01", "value": 83027.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-09-01", "value": 78151.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-08-01", "value": 74976.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-07-01", "value": 70894.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-06-01", "value": 68762.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-05-01", "value": 66339.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-04-01", "value": 64462.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-03-01", "value": 63916.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-02-01", "value": 62820.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-01-01", "value": 61256.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-12-01", "value": 62612.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-11-01", "value": 61560.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-10-01", "value": 60721.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-09-01", "value": 60628.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-08-01", "value": 60074.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-07-01", "value": 60001.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-06-01", "value": 60078.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-05-01", "value": 59732.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-04-01", "value": 59521.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-03-01", "value": 60687.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-02-01", "value": 59633.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-01-01", "value": 58716.0, "unit": "млн руб.", "comm_": "на отчетную дату"}], "Просроченная задолженность_ИЖК по ДДУ": [{"date": "2025-09-01", "value": 15338.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-08-01", "value": 14442.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-07-01", "value": 13217.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-06-01", "value": 12529.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-05-01", "value": 11865.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-04-01", "value": 11112.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-03-01", "value": 10718.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-02-01", "value": 9903.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-01-01", "value": 9331.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-12-01", "value": 8802.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-11-01", "value": 8573.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-10-01", "value": 7960.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-09-01", "value": 7511.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-08-01", "value": 7293.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-07-01", "value": 6957.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-06-01", "value": 6577.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-05-01", "value": 6434.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-04-01", "value": 6204.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-03-01", "value": 6060.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-02-01", "value": 5846.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-01-01", "value": 5607.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-12-01", "value": 5650.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-11-01", "value": 5464.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-10-01", "value": 5255.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-09-01", "value": 5296.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-08-01", "value": 5103.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-07-01", "value": 5074.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-06-01", "value": 5023.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-05-01", "value": 4932.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-04-01", "value": 4962.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-03-01", "value": 4987.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-02-01", "value": 4902.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2023-01-01", "value": 4759.0, "unit": "млн руб.", "comm_": "на отчетную дату"}], "Объем выданных кредитов_ИЖК": [{"date": "2025-09-01", "value": 392257.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-08-01", "value": 355872.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-07-01", "value": 308949.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-06-01", "value": 287330.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-05-01", "value": 290271.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-04-01", "value": 257075.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-03-01", "value": 227104.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-02-01", "value": 126932.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-01-01", "value": 291146.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-12-01", "value": 274353.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-11-01", "value": 367052.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-10-01", "value": 372836.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-09-01", "value": 375068.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-08-01", "value": 355976.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-07-01", "value": 788497.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-06-01", "value": 545712.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-05-01", "value": 465816.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-04-01", "value": 447282.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-03-01", "value": 332817.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-02-01", "value": 271788.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-01-01", "value": 785482.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-12-01", "value": 726080.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-11-01", "value": 769637.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-10-01", "value": 955207.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-09-01", "value": 849118.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-08-01", "value": 646509.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-07-01", "value": 626742.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-06-01", "value": 580470.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-05-01", "value": 566257.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-04-01", "value": 569416.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-03-01", "value": 422392.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-02-01", "value": 281648.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-01-01", "value": 696876.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}], "Объем выданных кредитов_ИЖК по ДДУ": [{"date": "2025-09-01", "value": 222906.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-08-01", "value": 197383.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-07-01", "value": 175590.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-06-01", "value": 167354.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-05-01", "value": 166844.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-04-01", "value": 166178.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-03-01", "value": 150257.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-02-01", "value": 86449.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-01-01", "value": 187209.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-12-01", "value": 160708.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-11-01", "value": 185279.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-10-01", "value": 179703.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-09-01", "value": 161077.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-08-01", "value": 117125.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-07-01", "value": 474652.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-06-01", "value": 294109.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-05-01", "value": 223463.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-04-01", "value": 223253.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-03-01", "value": 139345.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-02-01", "value": 128446.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-01-01", "value": 435484.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-12-01", "value": 374418.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-11-01", "value": 360897.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-10-01", "value": 464767.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-09-01", "value": 369636.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-08-01", "value": 248879.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-07-01", "value": 221848.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-06-01", "value": 209975.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-05-01", "value": 200407.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-04-01", "value": 219800.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-03-01", "value": 164986.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-02-01", "value": 104650.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-01-01", "value": 311822.0, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}], "Объем выданных кредитов_ИЖК на цели ИЖС": [{"date": "2025-09-01", "value": 60488.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-08-01", "value": 60305.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-07-01", "value": 47290.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-06-01", "value": 39150.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-05-01", "value": 36788.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-04-01", "value": 25762.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-03-01", "value": 20513.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-02-01", "value": 12544.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2025-01-01", "value": 40032.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-12-01", "value": 44239.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-11-01", "value": 65989.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-10-01", "value": 80708.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-09-01", "value": 90314.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-08-01", "value": 106848.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-07-01", "value": 144654.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-06-01", "value": 111017.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-05-01", "value": 101531.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-04-01", "value": 90849.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-03-01", "value": 76791.0, "unit": "млн руб.", "comm_": "на отчетную дату"}, {"date": "2024-02-01", "value": 62034.0, "unit": "млн руб.", "comm_": "на отчетную дату"}], "Объем выданных кредитов_Льготная ипотека": [{"date": "2025-08-01", "value": 2.2457895299213, "unit": "трлн руб.", "comm_": "на отчетную дату"}, {"date": "2025-07-01", "value": 1.85353262281503, "unit": "трлн руб.", "comm_": "на отчетную дату"}, {"date": "2025-06-01", "value": 1.49766432435956, "unit": "трлн руб.", "comm_": "на отчетную дату"}, {"date": "2025-05-01", "value": 1.18871537920581, "unit": "трлн руб.", "comm_": "на отчетную дату"}, {"date": "2025-04-01", "value": 0.90082576045653, "unit": "трлн руб.", "comm_": "на отчетную дату"}, {"date": "2025-03-01", "value": 0.61110871202406, "unit": "трлн руб.", "comm_": "на отчетную дату"}, {"date": "2025-02-01", "value": 0.35407670845617, "unit": "трлн руб.", "comm_": "на отчетную дату"}, {"date": "2025-01-01", "value": 0.12697372752208, "unit": "трлн руб.", "comm_": "на отчетную дату"}, {"date": "2024-01-01", "value": 4.88834175596055, "unit": "трлн руб.", "comm_": "на отчетную дату"}, {"date": "2023-01-01", "value": 7.77895701271916, "unit": "трлн руб.", "comm_": "на отчетную дату"}, {"date": "2022-01-01", "value": 4.81334600745716, "unit": "трлн руб.", "comm_": "на отчетную дату"}, {"date": "2021-01-01", "value": 5.69951606261018, "unit": "трлн руб.", "comm_": "на отчетную дату"}, {"date": "2020-01-01", "value": 4.44467981845679, "unit": "трлн руб.", "comm_": "на отчетную дату"}, {"date": "2019-01-01", "value": 2.93490487997954, "unit": "трлн руб.", "comm_": "на отчетную дату"}], "Средний размер кредита_ИЖК (без учета иностранной валюты)": [{"date": "2025-09-01", "value": 4.60979771431239, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-08-01", "value": 4.59414970090212, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-07-01", "value": 4.49740075920737, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-06-01", "value": 4.54197347234916, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-05-01", "value": 4.44880735278971, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-04-01", "value": 4.44673857373867, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-03-01", "value": 4.31952445348202, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-02-01", "value": 3.93050699284945, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-01-01", "value": 3.96851433904381, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-12-01", "value": 3.79386015256406, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-11-01", "value": 3.86638859165905, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-10-01", "value": 3.95146163590166, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-09-01", "value": 3.74610783462206, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-08-01", "value": 3.32203666995343, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-07-01", "value": 3.89635265501512, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-06-01", "value": 3.71958666671781, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-05-01", "value": 3.7799609009349, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-04-01", "value": 3.82203985841191, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-03-01", "value": 3.48273235474362, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-02-01", "value": 3.58035710164706, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-01-01", "value": 3.98987110656091, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-12-01", "value": 3.839987124716, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-11-01", "value": 3.84119339485262, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-10-01", "value": 4.01044123179154, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-09-01", "value": 3.92975753260707, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-08-01", "value": 3.79099869403429, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-07-01", "value": 3.73462849193214, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-06-01", "value": 3.67756222546727, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-05-01", "value": 3.69274443155951, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-04-01", "value": 3.69788781136956, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-03-01", "value": 3.68437827389362, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-02-01", "value": 3.64314342378429, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-01-01", "value": 3.95397411133903, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}], "Средний размер кредита_ИЖК по ДДУ (без учета иностранной валюты)": [{"date": "2025-09-01", "value": 5.76895063541577, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-08-01", "value": 5.72954339453556, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-07-01", "value": 5.6338444835374, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-06-01", "value": 5.73207725674408, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-05-01", "value": 5.62483173851797, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-04-01", "value": 5.55483123331963, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-03-01", "value": 5.53230085791826, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-02-01", "value": 5.41424625885326, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-01-01", "value": 5.25883185205006, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-12-01", "value": 5.34749194926729, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-11-01", "value": 5.68130190594781, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-10-01", "value": 5.60643779198203, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-09-01", "value": 5.5661037557013, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-08-01", "value": 5.66013844009713, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-07-01", "value": 4.97659017835977, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-06-01", "value": 5.06316920663545, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-05-01", "value": 5.18463760586065, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-04-01", "value": 5.29375327130581, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-03-01", "value": 5.04892057875177, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-02-01", "value": 4.97331320972587, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-01-01", "value": 5.03554620524664, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-12-01", "value": 4.87529908320525, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-11-01", "value": 4.9452130268913, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-10-01", "value": 4.99383963567177, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-09-01", "value": 4.87009726958089, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-08-01", "value": 4.86538117545833, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-07-01", "value": 4.91520420500432, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-06-01", "value": 4.83567677037608, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-05-01", "value": 4.8178347738873, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-04-01", "value": 4.84952538809836, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-03-01", "value": 5.11013378899182, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-02-01", "value": 5.20204535728886, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-01-01", "value": 5.4368043048973, "unit": "млн руб.", "comm_": "за месяц, предшествующий отчетной дате"}], "Количество выданных кредитов_ИЖК": [{"date": "2025-09-01", "value": 85092.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-08-01", "value": 77462.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-07-01", "value": 68695.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-06-01", "value": 63261.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-05-01", "value": 65247.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-04-01", "value": 57812.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-03-01", "value": 52574.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-02-01", "value": 32294.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-01-01", "value": 73364.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-12-01", "value": 72315.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-11-01", "value": 94934.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-10-01", "value": 94349.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-09-01", "value": 100122.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-08-01", "value": 107156.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-07-01", "value": 202368.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-06-01", "value": 146713.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-05-01", "value": 123233.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-04-01", "value": 117027.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-03-01", "value": 95562.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-02-01", "value": 75911.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-01-01", "value": 196869.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-12-01", "value": 189084.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-11-01", "value": 200364.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-10-01", "value": 238180.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-09-01", "value": 216074.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-08-01", "value": 170538.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-07-01", "value": 167819.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-06-01", "value": 157841.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-05-01", "value": 153343.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-04-01", "value": 153984.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-03-01", "value": 114644.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-02-01", "value": 77309.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-01-01", "value": 176247.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}], "Количество выданных кредитов_ИЖК по ДДУ": [{"date": "2025-09-01", "value": 38639.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-08-01", "value": 34450.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-07-01", "value": 31167.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-06-01", "value": 29196.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-05-01", "value": 29662.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-04-01", "value": 29916.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-03-01", "value": 27160.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-02-01", "value": 15967.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-01-01", "value": 35599.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-12-01", "value": 30053.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-11-01", "value": 32612.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-10-01", "value": 32053.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-09-01", "value": 28939.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-08-01", "value": 20693.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-07-01", "value": 95377.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-06-01", "value": 58088.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-05-01", "value": 43101.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-04-01", "value": 42173.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-03-01", "value": 27599.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-02-01", "value": 25827.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-01-01", "value": 86482.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-12-01", "value": 76799.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-11-01", "value": 72979.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-10-01", "value": 93068.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-09-01", "value": 75899.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-08-01", "value": 51153.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-07-01", "value": 45135.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-06-01", "value": 43422.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-05-01", "value": 41597.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-04-01", "value": 45324.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-03-01", "value": 32286.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-02-01", "value": 20117.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-01-01", "value": 57354.0, "unit": "ед.", "comm_": "за месяц, предшествующий отчетной дате"}], "Количество выданных кредитов_ИЖК на цели ИЖС": [{"date": "2025-09-01", "value": 13934.0, "unit": "ед.", "comm_": "на отчетную дату"}, {"date": "2025-08-01", "value": 14028.0, "unit": "ед.", "comm_": "на отчетную дату"}, {"date": "2025-07-01", "value": 12404.0, "unit": "ед.", "comm_": "на отчетную дату"}, {"date": "2025-06-01", "value": 10489.0, "unit": "ед.", "comm_": "на отчетную дату"}, {"date": "2025-05-01", "value": 10478.0, "unit": "ед.", "comm_": "на отчетную дату"}, {"date": "2025-04-01", "value": 8178.0, "unit": "ед.", "comm_": "на отчетную дату"}, {"date": "2025-03-01", "value": 7407.0, "unit": "ед.", "comm_": "на отчетную дату"}, {"date": "2025-02-01", "value": 6038.0, "unit": "ед.", "comm_": "на отчетную дату"}, {"date": "2025-01-01", "value": 14882.0, "unit": "ед.", "comm_": "на отчетную дату"}, {"date": "2024-12-01", "value": 17661.0, "unit": "ед.", "comm_": "на отчетную дату"}, {"date": "2024-11-01", "value": 24011.0, "unit": "ед.", "comm_": "на отчетную дату"}, {"date": "2024-10-01", "value": 27406.0, "unit": "ед.", "comm_": "на отчетную дату"}, {"date": "2024-09-01", "value": 31580.0, "unit": "ед.", "comm_": "на отчетную дату"}, {"date": "2024-08-01", "value": 43341.0, "unit": "ед.", "comm_": "на отчетную дату"}, {"date": "2024-07-01", "value": 59465.0, "unit": "ед.", "comm_": "на отчетную дату"}, {"date": "2024-06-01", "value": 45801.0, "unit": "ед.", "comm_": "на отчетную дату"}, {"date": "2024-05-01", "value": 36863.0, "unit": "ед.", "comm_": "на отчетную дату"}, {"date": "2024-04-01", "value": 32809.0, "unit": "ед.", "comm_": "на отчетную дату"}, {"date": "2024-03-01", "value": 28475.0, "unit": "ед.", "comm_": "на отчетную дату"}, {"date": "2024-02-01", "value": 22416.0, "unit": "ед.", "comm_": "на отчетную дату"}], "Количество выданных кредитов_Льготная ипотека": [{"date": "2025-08-01", "value": 0.502437, "unit": "млн ед.", "comm_": "на отчетную дату"}, {"date": "2025-07-01", "value": 0.417345, "unit": "млн ед.", "comm_": "на отчетную дату"}, {"date": "2025-06-01", "value": 0.339881, "unit": "млн ед.", "comm_": "на отчетную дату"}, {"date": "2025-05-01", "value": 0.271186, "unit": "млн ед.", "comm_": "на отчетную дату"}, {"date": "2025-04-01", "value": 0.207778, "unit": "млн ед.", "comm_": "на отчетную дату"}, {"date": "2025-03-01", "value": 0.142677, "unit": "млн ед.", "comm_": "на отчетную дату"}, {"date": "2025-02-01", "value": 0.084874, "unit": "млн ед.", "comm_": "на отчетную дату"}, {"date": "2025-01-01", "value": 0.032302, "unit": "млн ед.", "comm_": "на отчетную дату"}, {"date": "2024-01-01", "value": 1.303054, "unit": "млн ед.", "comm_": "на отчетную дату"}, {"date": "2023-01-01", "value": 2.036049, "unit": "млн ед.", "comm_": "на отчетную дату"}, {"date": "2022-01-01", "value": 1.327292, "unit": "млн ед.", "comm_": "на отчетную дату"}, {"date": "2021-01-01", "value": 1.908542, "unit": "млн ед.", "comm_": "на отчетную дату"}, {"date": "2020-01-01", "value": 1.780498, "unit": "млн ед.", "comm_": "на отчетную дату"}, {"date": "2019-01-01", "value": 1.311981, "unit": "млн ед.", "comm_": "на отчетную дату"}], "Средний срок кредитования_ИЖК (без учета иностранной валюты)": [{"date": "2025-09-01", "value": 307.0, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-08-01", "value": 307.5, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-07-01", "value": 308.0, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-06-01", "value": 308.6, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-05-01", "value": 308.3, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-04-01", "value": 310.7, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-03-01", "value": 309.8, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-02-01", "value": 305.5, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-01-01", "value": 303.7, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-12-01", "value": 302.2, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-11-01", "value": 299.3, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-10-01", "value": 302.8, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-09-01", "value": 298.3, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-08-01", "value": 289.5, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-07-01", "value": 310.2, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-06-01", "value": 303.7, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-05-01", "value": 298.3, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-04-01", "value": 299.6, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-03-01", "value": 292.1, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-02-01", "value": 294.8, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-01-01", "value": 302.3, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-12-01", "value": 299.3, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-11-01", "value": 296.3, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-10-01", "value": 298.7, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-09-01", "value": 294.0, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-08-01", "value": 291.1, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-07-01", "value": 288.8, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-06-01", "value": 288.9, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-05-01", "value": 286.2, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-04-01", "value": 287.4, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-03-01", "value": 287.5, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-02-01", "value": 284.9, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-01-01", "value": 289.4, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}], "Средний срок кредитования_ИЖК по ДДУ (без учета иностранной валюты)": [{"date": "2025-09-01", "value": 323.8, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-08-01", "value": 323.2, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-07-01", "value": 322.8, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-06-01", "value": 322.6, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-05-01", "value": 322.6, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-04-01", "value": 323.2, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-03-01", "value": 323.3, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-02-01", "value": 321.6, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-01-01", "value": 322.1, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-12-01", "value": 321.2, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-11-01", "value": 323.4, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-10-01", "value": 323.9, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-09-01", "value": 322.9, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-08-01", "value": 314.9, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-07-01", "value": 320.8, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-06-01", "value": 318.8, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-05-01", "value": 314.2, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-04-01", "value": 316.4, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-03-01", "value": 312.0, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-02-01", "value": 312.9, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-01-01", "value": 316.0, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-12-01", "value": 313.9, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-11-01", "value": 311.4, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-10-01", "value": 312.7, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-09-01", "value": 309.3, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-08-01", "value": 308.3, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-07-01", "value": 307.8, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-06-01", "value": 307.6, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-05-01", "value": 304.9, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-04-01", "value": 307.9, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-03-01", "value": 308.1, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-02-01", "value": 308.8, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-01-01", "value": 311.3, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}], "Средний срок кредитования_ИЖК на цели ИЖС": [{"date": "2025-09-01", "value": 310.3, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-08-01", "value": 309.9, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-07-01", "value": 308.7, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-06-01", "value": 308.9, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-05-01", "value": 308.6, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-04-01", "value": 309.3, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-03-01", "value": 304.5, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-02-01", "value": 295.8, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-01-01", "value": 296.8, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-12-01", "value": 301.3, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-11-01", "value": 298.1, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-10-01", "value": 299.5, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-09-01", "value": 295.3, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-08-01", "value": 297.0, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-07-01", "value": 309.0, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-06-01", "value": 302.6, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-05-01", "value": 299.4, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-04-01", "value": 299.9, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-03-01", "value": 296.2, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-02-01", "value": 297.8, "unit": "мес.", "comm_": "за месяц, предшествующий отчетной дате"}], "Средняя ставка по кредитам_ИЖК (без учета иностранной валюты)": [{"date": "2025-09-01", "value": 7.58, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-08-01", "value": 7.46, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-07-01", "value": 7.47, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-06-01", "value": 7.47, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-05-01", "value": 7.52, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-04-01", "value": 7.56, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-03-01", "value": 7.7, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-02-01", "value": 8.35, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-01-01", "value": 8.47, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-12-01", "value": 9.01, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-11-01", "value": 9.65, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-10-01", "value": 8.94, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-09-01", "value": 9.32, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-08-01", "value": 10.19, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-07-01", "value": 7.57, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-06-01", "value": 8.06, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-05-01", "value": 8.41, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-04-01", "value": 8.41, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-03-01", "value": 9.28, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-02-01", "value": 8.4, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-01-01", "value": 7.91, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-12-01", "value": 8.18, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-11-01", "value": 8.35, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-10-01", "value": 7.92, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-09-01", "value": 8.04, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-08-01", "value": 8.25, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-07-01", "value": 8.45, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-06-01", "value": 8.4, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-05-01", "value": 8.52, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-04-01", "value": 8.18, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-03-01", "value": 8.05, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-02-01", "value": 7.86, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-01-01", "value": 6.65, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}], "Средняя ставка по кредитам_ИЖК по ДДУ (без учета иностранной валюты)": [{"date": "2025-09-01", "value": 6.08, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-08-01", "value": 6.0, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-07-01", "value": 6.05, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-06-01", "value": 6.04, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-05-01", "value": 5.98, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-04-01", "value": 6.01, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-03-01", "value": 6.0, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-02-01", "value": 6.13, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-01-01", "value": 6.15, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-12-01", "value": 6.06, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-11-01", "value": 6.16, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-10-01", "value": 6.25, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-09-01", "value": 6.35, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-08-01", "value": 6.17, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-07-01", "value": 6.24, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-06-01", "value": 6.16, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-05-01", "value": 6.22, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-04-01", "value": 6.28, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-03-01", "value": 6.34, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-02-01", "value": 6.1, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-01-01", "value": 6.12, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-12-01", "value": 6.12, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-11-01", "value": 6.14, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-10-01", "value": 5.83, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-09-01", "value": 5.92, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-08-01", "value": 6.06, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-07-01", "value": 6.12, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-06-01", "value": 6.06, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-05-01", "value": 6.04, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-04-01", "value": 5.57, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-03-01", "value": 5.21, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-02-01", "value": 4.82, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2023-01-01", "value": 3.5, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}], "Средняя ставка по кредитам_ИЖК на цели ИЖС": [{"date": "2025-09-01", "value": 7.44, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-08-01", "value": 7.48, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-07-01", "value": 7.75, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-06-01", "value": 7.8, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-05-01", "value": 8.19, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-04-01", "value": 8.81, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-03-01", "value": 9.49, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-02-01", "value": 10.76, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2025-01-01", "value": 9.67, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-12-01", "value": 10.59, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-11-01", "value": 10.29, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-10-01", "value": 8.5, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-09-01", "value": 8.36, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-08-01", "value": 8.73, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-07-01", "value": 7.63, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-06-01", "value": 8.07, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-05-01", "value": 7.99, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-04-01", "value": 8.12, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-03-01", "value": 8.24, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}, {"date": "2024-02-01", "value": 7.96, "unit": "%", "comm_": "за месяц, предшествующий отчетной дате"}], "Средняя цена на 1 кв. м. _Первичный рынок": [{"date": "2025-04-01", "value": 205097.71, "unit": "руб.", "comm_": "за квартал"}, {"date": "2025-01-01", "value": 201955.0, "unit": "руб.", "comm_": "за квартал"}, {"date": "2024-10-01", "value": 177887.0, "unit": "руб.", "comm_": "за квартал"}, {"date": "2024-07-01", "value": 175076.0, "unit": "руб.", "comm_": "за квартал"}, {"date": "2024-04-01", "value": 171166.0, "unit": "руб.", "comm_": "за квартал"}, {"date": "2024-01-01", "value": 167580.0, "unit": "руб.", "comm_": "за квартал"}, {"date": "2023-10-01", "value": 140371.0, "unit": "руб.", "comm_": "за квартал"}, {"date": "2023-07-01", "value": 134098.13, "unit": "руб.", "comm_": "за квартал"}, {"date": "2023-04-01", "value": 128829.0, "unit": "руб.", "comm_": "за квартал"}, {"date": "2023-01-01", "value": 127228.93, "unit": "руб.", "comm_": "за квартал"}], "Средняя цена на 1 кв. м. _Вторичный рынок": [{"date": "2025-04-01", "value": 128048.96, "unit": "руб.", "comm_": "за квартал"}, {"date": "2025-01-01", "value": 126559.65, "unit": "руб.", "comm_": "за квартал"}, {"date": "2024-10-01", "value": 114082.0, "unit": "руб.", "comm_": "за квартал"}, {"date": "2024-07-01", "value": 111260.83, "unit": "руб.", "comm_": "за квартал"}, {"date": "2024-04-01", "value": 110151.0, "unit": "руб.", "comm_": "за квартал"}, {"date": "2024-01-01", "value": 108127.0, "unit": "руб.", "comm_": "за квартал"}, {"date": "2023-10-01", "value": 97418.0, "unit": "руб.", "comm_": "за квартал"}, {"date": "2023-07-01", "value": 94526.47, "unit": "руб.", "comm_": "за квартал"}, {"date": "2023-04-01", "value": 92363.0, "unit": "руб.", "comm_": "за квартал"}, {"date": "2023-01-01", "value": 90891.5, "unit": "руб.", "comm_": "за квартал"}]};
+        const menuStructure = {"Ипотека": {"Масштаб рынка": ["Количество кредитных организаций"], "Кредитный портфель": ["Остаток ссудной задолженности", "Прирост задолженности по ИЖК, г/г", "Просроченная задолженность", "Качество портфеля ИЖК", "Доля ИЖК в задолженности по кредитам"], "Операционная активность": ["Объем выданных кредитов", "Прирост объема новых ИЖК, г/г", "Количество выданных кредитов", "Прирост количества ИЖК, г/г", "Доля ИЖК в выданных кредитах"], "Условия кредитрования": ["Средний размер кредита", "Средний срок кредитования", "Средняя ставка по кредитам"], "Рыночные условия": ["Средняя цена на 1 кв. м. "]}};
     </script>
 </body>
 </html>
