@@ -28,23 +28,25 @@ const premiumChartContainer = document.getElementById('premium-chart-container')
 const pre2025TableContainer = document.getElementById('pre-2025-table-container');
 const post2025TableContainer = document.getElementById('post-2025-table-container');
 
-// ---------- Загрузка данных ----------
-async function loadData() {
-    try {
-        const [menuRes, dataRes, histRes] = await Promise.all([
-            fetch('menu.json'),
-            fetch('data.json'),
-            fetch('historical.json')
-        ]);
-        menuStructure = await menuRes.json();
-        currentData = await dataRes.json();
-        historicalData = await histRes.json();
-        initApp();
-    } catch (err) {
-        console.error('Ошибка загрузки данных:', err);
+// Загрузка встроенных данных из тега <script id="dashboard-data">
+(function loadEmbeddedData() {
+    const dataScript = document.getElementById('dashboard-data');
+    if (dataScript && dataScript.textContent) {
+        try {
+            const embedded = JSON.parse(dataScript.textContent);
+            menuStructure = embedded.menu;
+            currentData = embedded.current;
+            historicalData = embedded.historical;
+            initApp();
+        } catch(e) {
+            console.error('Ошибка парсинга встроенных данных:', e);
+            dashboardContainer.innerHTML = '<div class="empty-section">Ошибка загрузки данных</div>';
+        }
+    } else {
+        console.error('Не найден тег с данными');
         dashboardContainer.innerHTML = '<div class="empty-section">Ошибка загрузки данных</div>';
     }
-}
+})();
 
 // ---------- Инициализация ----------
 function initApp() {
@@ -132,21 +134,17 @@ function renderContent(section, group) {
 
 // ---------- Обработчики меню ----------
 function attachEventListeners() {
-    // Переключение подменю
     document.querySelectorAll('.submenu-toggle').forEach(toggle => {
         toggle.removeEventListener('click', submenuToggleHandler);
         toggle.addEventListener('click', submenuToggleHandler);
     });
-    // Клики по элементам подменю
     document.querySelectorAll('.submenu-item').forEach(item => {
         item.removeEventListener('click', submenuItemHandler);
         item.addEventListener('click', submenuItemHandler);
     });
-    // Кнопка показа/скрытия сайдбара
     const sidebarToggle = document.querySelector('.sidebar-toggle');
     sidebarToggle.removeEventListener('click', sidebarToggleHandler);
     sidebarToggle.addEventListener('click', sidebarToggleHandler);
-    // Закрытие при клике вне меню
     document.removeEventListener('click', outsideClickHandler);
     document.addEventListener('click', outsideClickHandler);
 }
@@ -236,7 +234,6 @@ function detailClickHandler(e) {
     currentHistorical = hist;
     currentUnit = hist[0].unit || '';
     isQuarterlyData = hist[0].comm_.toLowerCase().includes('квартал');
-    // Определяем min/max даты
     const dates = hist.map(h => h.date);
     minDate = dates.reduce((a,b) => a < b ? a : b);
     maxDate = dates.reduce((a,b) => a > b ? a : b);
@@ -249,7 +246,6 @@ function detailClickHandler(e) {
     startDateInput.max = maxDate;
     endDateInput.min = minDate;
     endDateInput.max = maxDate;
-    // Очищаем старые графики
     if (currentChart) { currentChart.destroy(); currentChart = null; }
     if (premiumChart) { premiumChart.destroy(); premiumChart = null; }
     premiumChartContainer.classList.add('hidden');
@@ -296,8 +292,32 @@ function renderStandardChart(data) {
     if (currentChart) currentChart.destroy();
     currentChart = new Chart(detailChartCtx, {
         type: 'line',
-        data: { labels, datasets: [{ label: 'Значение', data: values, borderColor: '#5a7ae9', borderWidth: 3, fill: true, backgroundColor: 'rgba(90,122,233,0.1)', pointRadius: 0, tension: 0.2 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => `Значение: ${formatValue(ctx.parsed.y)} ${currentUnit}` } } }, scales: { x: { ticks: { maxRotation: 45, minRotation: 45 } }, y: { beginAtZero: true } } }
+        data: { labels, datasets: [{
+            label: 'Значение',
+            data: values,
+            borderColor: '#5a7ae9',
+            borderWidth: 3,
+            fill: true,
+            backgroundColor: 'rgba(90,122,233,0.1)',
+            pointRadius: 0,
+            tension: 0.2
+        }] },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => `Значение: ${formatValue(ctx.parsed.y)} ${currentUnit}`
+                    }
+                }
+            },
+            scales: {
+                x: { ticks: { maxRotation: 45, minRotation: 45 } },
+                y: { beginAtZero: true }
+            }
+        }
     });
 }
 function renderPremiumMortgageChart(data) {
@@ -308,8 +328,32 @@ function renderPremiumMortgageChart(data) {
         const values = pre2025.map(d => parseFloat(d.value));
         if (currentChart) currentChart.destroy();
         currentChart = new Chart(detailChartCtx, {
-            type: 'line', data: { labels, datasets: [{ label: 'Значение (до 2025)', data: values, borderColor: '#5a7ae9', borderWidth: 3, fill: true, backgroundColor: 'rgba(90,122,233,0.1)', pointRadius: 0, tension: 0.2 }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: (ctx) => `Значение: ${formatValue(ctx.parsed.y)} ${currentUnit}` } } }, scales: { x: { ticks: { maxRotation: 45 } }, y: { beginAtZero: true } } }
+            type: 'line',
+            data: { labels, datasets: [{
+                label: 'Значение (до 2025)',
+                data: values,
+                borderColor: '#5a7ae9',
+                borderWidth: 3,
+                fill: true,
+                backgroundColor: 'rgba(90,122,233,0.1)',
+                pointRadius: 0,
+                tension: 0.2
+            }] },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `Значение: ${formatValue(ctx.parsed.y)} ${currentUnit}`
+                        }
+                    }
+                },
+                scales: {
+                    x: { ticks: { maxRotation: 45 } },
+                    y: { beginAtZero: true }
+                }
+            }
         });
     }
     if (post2025.length) {
@@ -318,8 +362,25 @@ function renderPremiumMortgageChart(data) {
         premiumChartContainer.classList.remove('hidden');
         if (premiumChart) premiumChart.destroy();
         premiumChart = new Chart(premiumChartCtx, {
-            type: 'bar', data: { labels, datasets: [{ label: 'Накопленный объем (2025)', data: values, backgroundColor: '#6d5acf', borderRadius: 6 }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { tooltip: { callbacks: { label: (ctx) => `Значение: ${formatValue(ctx.parsed.y)} ${currentUnit}` } } }, scales: { y: { beginAtZero: true } } }
+            type: 'bar',
+            data: { labels, datasets: [{
+                label: 'Накопленный объем (2025)',
+                data: values,
+                backgroundColor: '#6d5acf',
+                borderRadius: 6
+            }] },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => `Значение: ${formatValue(ctx.parsed.y)} ${currentUnit}`
+                        }
+                    }
+                },
+                scales: { y: { beginAtZero: true } }
+            }
         });
     } else {
         premiumChartContainer.classList.add('hidden');
@@ -412,6 +473,3 @@ function escapeHtml(str) {
 // Автообновление при смене дат
 startDateInput.addEventListener('change', () => { if (updateTimeout) clearTimeout(updateTimeout); updateTimeout = setTimeout(updateDetailView, 300); });
 endDateInput.addEventListener('change', () => { if (updateTimeout) clearTimeout(updateTimeout); updateTimeout = setTimeout(updateDetailView, 300); });
-
-// Запуск
-loadData();
