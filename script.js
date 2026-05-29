@@ -1,20 +1,173 @@
-// Глобальные переменные
-let menuStructure = null;
-let currentData = null;
-let historicalData = null;
-let currentSection = "Ипотека";
-let currentGroup = "Масштаб рынка";
 
-// Детализация
-let currentChart = null, premiumChart = null;
-let currentHistorical = null, currentUnit = '', isQuarterlyData = false, currentIndicatorName = '';
-let minDate = null, maxDate = null;
-let updateTimeout = null;
+// Переключение бокового меню
+const sidebarToggle = document.querySelector('.sidebar-toggle');
+const body = document.body;
 
-// DOM
-const sidebarMenu = document.querySelector('.sidebar-menu');
-const dashboardContainer = document.getElementById('dashboard-container');
+sidebarToggle.addEventListener('click', () => {
+    body.classList.toggle('sidebar-open');
+
+    // Обновляем иконку
+    const icon = sidebarToggle.querySelector('i');
+    if (body.classList.contains('sidebar-open')) {
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-times');
+    } else {
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+    }
+});
+
+// Закрытие меню при клике вне области
+document.addEventListener('click', function(event) {
+    const sidebar = document.querySelector('.sidebar');
+    const sidebarToggle = document.querySelector('.sidebar-toggle');
+
+    // Если клик был не по боковому меню и не по кнопке переключения меню, и меню открыто
+    if (!sidebar.contains(event.target) &&
+        event.target !== sidebarToggle &&
+        !sidebarToggle.contains(event.target) &&
+        body.classList.contains('sidebar-open')) {
+
+        body.classList.remove('sidebar-open');
+        // Возвращаем иконку кнопки в исходное состояние
+        const icon = sidebarToggle.querySelector('i');
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+    }
+});
+
+// Обработчики для подменю
+document.querySelectorAll('.submenu-toggle').forEach(toggle => {
+    toggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const menuItem = this.closest('.menu-item');
+        menuItem.classList.toggle('active');
+    });
+});
+
+// Переключение разделов
+const menuItems = document.querySelectorAll('.menu-item:not(.has-submenu)');
+const submenuItems = document.querySelectorAll('.submenu-item');
+const contents = document.querySelectorAll('.content');
 const sectionHeader = document.getElementById('current-section');
+
+// Функция для активации раздела
+function activateSection(sectionId) {
+    // Скрываем все контенты
+    contents.forEach(c => c.classList.remove('active'));
+
+    // Показываем выбранный контент
+    const contentElement = document.getElementById(`content-${sectionId}`);
+    if (contentElement) {
+        contentElement.classList.add('active');
+    }
+
+    // Сохраняем активный раздел
+    localStorage.setItem('activeSection', sectionId);
+}
+
+// Функция для активации группы
+function activateGroup(section, group) {
+    const sectionId = `${section}-${group}`;
+    activateSection(sectionId);
+
+    // Обновляем заголовок раздела
+    sectionHeader.textContent = `${section} > ${group}`;
+
+    // Обновляем активные элементы меню
+    activateMenuItems(section, group);
+
+    // Сохраняем активную группу
+    localStorage.setItem('activeSection', section);
+    localStorage.setItem('activeGroup', group);
+}
+
+// Обработчики для пунктов меню
+menuItems.forEach(item => {
+    item.addEventListener('click', function() {
+        const section = this.getAttribute('data-section');
+        activateSection(section);
+        sectionHeader.textContent = section;
+
+        // На мобильных устройствах закрываем меню после выбора
+        if (window.innerWidth <= 768) {
+            body.classList.remove('sidebar-open');
+            sidebarToggle.querySelector('i').classList.remove('fa-times');
+            sidebarToggle.querySelector('i').classList.add('fa-bars');
+        }
+    });
+});
+
+// Обработчики для пунктов подменю
+submenuItems.forEach(item => {
+    item.addEventListener('click', function() {
+        const section = this.getAttribute('data-section');
+        const group = this.getAttribute('data-group');
+        activateGroup(section, group);
+
+        // На мобильных устройствах закрываем меню после выбора
+        if (window.innerWidth <= 768) {
+            body.classList.remove('sidebar-open');
+            sidebarToggle.querySelector('i').classList.remove('fa-times');
+            sidebarToggle.querySelector('i').classList.add('fa-bars');
+        }
+
+        // Убираем классы активности со всех пунктов
+        document.querySelectorAll('.menu-item, .submenu-item').forEach(el => {
+            el.classList.remove('active');
+        });
+
+        // Активируем текущие пункты
+        activateMenuItems(section, group);
+    });
+});
+
+// Восстановление активного раздела при загрузке
+document.addEventListener('DOMContentLoaded', () => {
+    // Всегда активируем раздел "Ипотека" и группу "Масштаб рынка" при загрузке
+    activateGroup("Ипотека", "Масштаб рынка");
+
+    // Инициализация обработчиков для кнопок детализации
+    document.querySelectorAll('.detail-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const key = this.getAttribute('data-key');
+            const category = this.getAttribute('data-category');
+            const subcategory = this.getAttribute('data-subcategory');
+
+            // Сохраняем название показателя
+            currentIndicatorName = `${category} - ${subcategory}`;
+
+            // Показываем экран детализации
+            showDetailView(key, category, subcategory);
+
+            // Разворачиваем на весь экран
+            body.classList.add('detail-view-active');
+        });
+    });
+});
+
+// Функция для активации соответствующих пунктов меню
+function activateMenuItems(section, group) {
+    // Находим основной пункт меню
+    const mainMenuItem = document.querySelector(`.menu-item[data-section="${section}"]`);
+    if (mainMenuItem) {
+        mainMenuItem.classList.add('active');
+
+        // Раскрываем подменю если нужно
+        const submenuToggle = mainMenuItem.querySelector('.submenu-toggle');
+        if (submenuToggle) {
+            mainMenuItem.classList.add('active');
+        }
+    }
+
+    // Находим пункт подменю
+    const submenuItem = document.querySelector(`.submenu-item[data-section="${section}"][data-group="${group}"]`);
+    if (submenuItem) {
+        submenuItem.classList.add('active');
+    }
+}
+
+// Детализация показателей
 const detailView = document.getElementById('detail-view');
 const backBtn = document.getElementById('back-btn');
 const detailTitle = document.getElementById('detail-title');
@@ -28,417 +181,424 @@ const premiumChartContainer = document.getElementById('premium-chart-container')
 const pre2025TableContainer = document.getElementById('pre-2025-table-container');
 const post2025TableContainer = document.getElementById('post-2025-table-container');
 
-// Загрузка встроенных данных из тега <script id="dashboard-data">
-(function loadEmbeddedData() {
-    const dataScript = document.getElementById('dashboard-data');
-    if (dataScript && dataScript.textContent) {
-        try {
-            const embedded = JSON.parse(dataScript.textContent);
-            menuStructure = embedded.menu;
-            currentData = embedded.current;
-            historicalData = embedded.historical;
-            initApp();
-        } catch(e) {
-            console.error('Ошибка парсинга встроенных данных:', e);
-            dashboardContainer.innerHTML = '<div class="empty-section">Ошибка загрузки данных</div>';
-        }
-    } else {
-        console.error('Не найден тег с данными');
-        dashboardContainer.innerHTML = '<div class="empty-section">Ошибка загрузки данных</div>';
-    }
-})();
+let currentChart = null;
+let premiumChart = null;
+let currentData = null;
+let minDate = null;
+let maxDate = null;
+let currentUnit = '';
+let updateTimeout = null;
+let isQuarterlyData = false; // Флаг для квартальных данных
+let currentIndicatorName = ''; // Название текущего показателя
 
-// ---------- Инициализация ----------
-function initApp() {
-    buildSidebar();
-    renderContent(currentSection, currentGroup);
-    attachEventListeners();
-    restoreActiveMenu();
-    attachDetailButtons();
+// Обработчик для кнопки "Назад"
+backBtn.addEventListener('click', function() {
+    hideDetailView();
+
+    // Возвращаемся к обычному виду
+    body.classList.remove('detail-view-active');
+});
+
+// Автоматическое обновление при изменении дат
+startDateInput.addEventListener('change', handleDateChange);
+endDateInput.addEventListener('change', handleDateChange);
+
+function handleDateChange() {
+    // Защита от слишком частых обновлений
+    if (updateTimeout) {
+        clearTimeout(updateTimeout);
+    }
+
+    updateTimeout = setTimeout(() => {
+        updateDetailView();
+    }, 300);
 }
 
-// ---------- Построение бокового меню ----------
-function buildSidebar() {
-    sidebarMenu.innerHTML = '';
-    const menuIcons = {
-        "Ипотека": "fas fa-home",
-        "Кредитование ЮЛ": "fas fa-building",
-        "Кредитование ФЛ": "fas fa-user"
-    };
-    for (const [section, groups] of Object.entries(menuStructure)) {
-        const li = document.createElement('li');
-        li.className = 'menu-item has-submenu';
-        li.setAttribute('data-section', section);
-        const mainDiv = document.createElement('div');
-        mainDiv.className = 'menu-main-item';
-        mainDiv.innerHTML = `<i class="${menuIcons[section] || 'fas fa-folder'}"></i><span>${section}</span><i class="fas fa-chevron-down submenu-toggle"></i>`;
-        li.appendChild(mainDiv);
-        const subUl = document.createElement('ul');
-        subUl.className = 'submenu';
-        for (const groupName of Object.keys(groups)) {
-            const subLi = document.createElement('li');
-            subLi.className = 'submenu-item';
-            subLi.setAttribute('data-section', section);
-            subLi.setAttribute('data-group', groupName);
-            subLi.innerHTML = `<span>${groupName}</span>`;
-            subUl.appendChild(subLi);
-        }
-        li.appendChild(subUl);
-        sidebarMenu.appendChild(li);
-    }
-}
+// Показать экран детализации
+function showDetailView(key, category, subcategory) {
+    // Получаем данные для показателя
+    const data = historicalData[key];
+    if (!data || data.length === 0) return;
 
-// ---------- Рендер контента (KPI-карточки) ----------
-function renderContent(section, group) {
-    const groups = menuStructure[section];
-    if (!groups || !groups[group]) {
-        dashboardContainer.innerHTML = '<div class="empty-section">Раздел в разработке</div>';
-        sectionHeader.textContent = `${section} > ${group}`;
-        return;
-    }
-    const categories = groups[group];
-    let html = '<div class="dashboard">';
-    for (const category of categories) {
-        const items = currentData.filter(item => item.category === category);
-        if (items.length === 0) continue;
-        html += `<div class="kpi-group"><h3 class="category-title">${category}</h3><div class="kpi-cards">`;
-        for (const item of items) {
-            const trendClass = item.trend === '▲' ? 'trend-up' : 'trend-down';
-            const changeUnit = item.unit === '%' ? 'п.п.' : '%';
-            const changeSign = parseFloat(item.change) > 0 ? '+' : '';
-            html += `
-                <div class="kpi-card">
-                    <div class="kpi-header">
-                        <div class="kpi-subcategory">${escapeHtml(item.subcategory)}</div>
-                        <div class="kpi-period">${escapeHtml(item.period)}</div>
-                    </div>
-                    <div class="kpi-main">
-                        <div class="kpi-value">${escapeHtml(item.value)} ${escapeHtml(item.unit)}</div>
-                        <div class="kpi-change-container">
-                            <span class="${trendClass}">${escapeHtml(item.trend)}</span>
-                            <span>${changeSign}${escapeHtml(item.change)} ${changeUnit}</span>
-                        </div>
-                    </div>
-                    <button class="detail-btn" data-key="${escapeHtml(item.key)}" data-category="${escapeHtml(item.category)}" data-subcategory="${escapeHtml(item.subcategory)}">
-                        <i class="fas fa-chart-bar"></i><span class="btn-text">Детализация</span>
-                    </button>
-                </div>`;
-        }
-        html += `</div></div>`;
-    }
-    html += '</div>';
-    dashboardContainer.innerHTML = html;
-    sectionHeader.textContent = `${section} > ${group}`;
-    attachDetailButtons();
-}
+    // Сохраняем данные
+    currentData = data;
 
-// ---------- Обработчики меню ----------
-function attachEventListeners() {
-    document.querySelectorAll('.submenu-toggle').forEach(toggle => {
-        toggle.removeEventListener('click', submenuToggleHandler);
-        toggle.addEventListener('click', submenuToggleHandler);
+    // Устанавливаем заголовок
+    detailTitle.textContent = `${category} - ${subcategory}`;
+
+    // Устанавливаем комментарий
+    const comment = data.length > 0 ? data[0].comm_ : '';
+    detailComment.textContent = comment;
+
+    // Определяем, являются ли данные квартальными
+    isQuarterlyData = comment.toLowerCase().includes('квартал') ||
+        comment.toLowerCase().includes('квартала') ||
+        comment.toLowerCase().includes('квартальные');
+
+    // Определяем диапазон дат
+    minDate = data[0].date;
+    maxDate = data[0].date;
+
+    data.forEach(item => {
+        if (item.date < minDate) minDate = item.date;
+        if (item.date > maxDate) maxDate = item.date;
     });
-    document.querySelectorAll('.submenu-item').forEach(item => {
-        item.removeEventListener('click', submenuItemHandler);
-        item.addEventListener('click', submenuItemHandler);
-    });
-    const sidebarToggle = document.querySelector('.sidebar-toggle');
-    sidebarToggle.removeEventListener('click', sidebarToggleHandler);
-    sidebarToggle.addEventListener('click', sidebarToggleHandler);
-    document.removeEventListener('click', outsideClickHandler);
-    document.addEventListener('click', outsideClickHandler);
-}
 
-function submenuToggleHandler(e) {
-    e.stopPropagation();
-    const menuItem = this.closest('.menu-item');
-    menuItem.classList.toggle('active');
-}
-function submenuItemHandler(e) {
-    const section = this.getAttribute('data-section');
-    const group = this.getAttribute('data-group');
-    currentSection = section;
-    currentGroup = group;
-    renderContent(section, group);
-    if (window.innerWidth <= 768) {
-        document.body.classList.remove('sidebar-open');
-        const toggleIcon = document.querySelector('.sidebar-toggle i');
-        toggleIcon.classList.remove('fa-times');
-        toggleIcon.classList.add('fa-bars');
-    }
-    saveActiveState(section, group);
-    highlightActiveMenuItem(section, group);
-}
-function sidebarToggleHandler() {
-    document.body.classList.toggle('sidebar-open');
-    const icon = this.querySelector('i');
-    if (document.body.classList.contains('sidebar-open')) {
-        icon.classList.remove('fa-bars');
-        icon.classList.add('fa-times');
-    } else {
-        icon.classList.remove('fa-times');
-        icon.classList.add('fa-bars');
-    }
-}
-function outsideClickHandler(event) {
-    const sidebar = document.querySelector('.sidebar');
-    const sidebarToggle = document.querySelector('.sidebar-toggle');
-    if (!sidebar.contains(event.target) && event.target !== sidebarToggle && !sidebarToggle.contains(event.target) && document.body.classList.contains('sidebar-open')) {
-        document.body.classList.remove('sidebar-open');
-        const icon = sidebarToggle.querySelector('i');
-        icon.classList.remove('fa-times');
-        icon.classList.add('fa-bars');
-    }
-}
-
-// ---------- Сохранение/восстановление активного раздела ----------
-function saveActiveState(section, group) {
-    localStorage.setItem('activeSection', section);
-    localStorage.setItem('activeGroup', group);
-}
-function restoreActiveMenu() {
-    const savedSection = localStorage.getItem('activeSection');
-    const savedGroup = localStorage.getItem('activeGroup');
-    if (savedSection && savedGroup && menuStructure[savedSection] && menuStructure[savedSection][savedGroup]) {
-        currentSection = savedSection;
-        currentGroup = savedGroup;
-        renderContent(savedSection, savedGroup);
-        highlightActiveMenuItem(savedSection, savedGroup);
-    } else {
-        renderContent("Ипотека", "Масштаб рынка");
-        highlightActiveMenuItem("Ипотека", "Масштаб рынка");
-    }
-}
-function highlightActiveMenuItem(section, group) {
-    document.querySelectorAll('.menu-item, .submenu-item').forEach(el => el.classList.remove('active'));
-    const parentItem = document.querySelector(`.menu-item[data-section="${section}"]`);
-    if (parentItem) parentItem.classList.add('active');
-    const subItem = document.querySelector(`.submenu-item[data-section="${section}"][data-group="${group}"]`);
-    if (subItem) subItem.classList.add('active');
-}
-
-// ---------- Кнопки детализации ----------
-function attachDetailButtons() {
-    document.querySelectorAll('.detail-btn').forEach(btn => {
-        btn.removeEventListener('click', detailClickHandler);
-        btn.addEventListener('click', detailClickHandler);
-    });
-}
-function detailClickHandler(e) {
-    const key = this.getAttribute('data-key');
-    const category = this.getAttribute('data-category');
-    const subcategory = this.getAttribute('data-subcategory');
-    currentIndicatorName = `${category} - ${subcategory}`;
-    const hist = historicalData[key];
-    if (!hist || hist.length === 0) return;
-    currentHistorical = hist;
-    currentUnit = hist[0].unit || '';
-    isQuarterlyData = hist[0].comm_.toLowerCase().includes('квартал');
-    const dates = hist.map(h => h.date);
-    minDate = dates.reduce((a,b) => a < b ? a : b);
-    maxDate = dates.reduce((a,b) => a > b ? a : b);
-    detailTitle.textContent = currentIndicatorName;
-    detailComment.textContent = hist[0].comm_ || '';
+    // Устанавливаем текст с диапазоном дат
     dateRangeText.textContent = `Доступные данные: с ${formatDate(minDate)} по ${formatDate(maxDate)}`;
+
+    // Устанавливаем фильтры дат
     startDateInput.value = minDate;
     endDateInput.value = maxDate;
     startDateInput.min = minDate;
     startDateInput.max = maxDate;
     endDateInput.min = minDate;
     endDateInput.max = maxDate;
-    if (currentChart) { currentChart.destroy(); currentChart = null; }
-    if (premiumChart) { premiumChart.destroy(); premiumChart = null; }
+
+    // Скрываем дополнительные контейнеры
     premiumChartContainer.classList.add('hidden');
-    pre2025TableContainer.innerHTML = '';
-    post2025TableContainer.innerHTML = '';
     pre2025TableContainer.classList.add('hidden');
     post2025TableContainer.classList.add('hidden');
+
+    // Обновляем представление
     updateDetailView();
+
+    // Показываем экран детализации
     detailView.classList.remove('hidden');
-    document.body.classList.add('detail-view-active');
 }
+
+// Скрыть экран детализации
 function hideDetailView() {
     detailView.classList.add('hidden');
-    document.body.classList.remove('detail-view-active');
-    if (currentChart) { currentChart.destroy(); currentChart = null; }
-    if (premiumChart) { premiumChart.destroy(); premiumChart = null; }
-    currentHistorical = null;
-}
-backBtn.addEventListener('click', hideDetailView);
 
-// ---------- Обновление графика и таблиц ----------
+    // Уничтожаем предыдущий график
+    if (currentChart) {
+        currentChart.destroy();
+        currentChart = null;
+    }
+
+    if (premiumChart) {
+        premiumChart.destroy();
+        premiumChart = null;
+    }
+
+    // Очищаем данные
+    currentData = null;
+    minDate = null;
+    maxDate = null;
+    currentUnit = '';
+    isQuarterlyData = false;
+    currentIndicatorName = '';
+}
+
+// Обновить представление детализации
 function updateDetailView() {
-    if (!currentHistorical) return;
+    if (!currentData) return;
+
+    // Получаем выбранные даты
     const startDate = startDateInput.value || minDate;
     const endDate = endDateInput.value || maxDate;
-    let filtered = currentHistorical.filter(item => item.date >= startDate && item.date <= endDate);
-    filtered.sort((a,b) => a.date.localeCompare(b.date));
-    const isPremium = currentIndicatorName.includes('Льготная ипотека') &&
-        (currentIndicatorName.includes('Объем выданных кредитов') || currentIndicatorName.includes('Количество выданных кредитов'));
-    updateChart(filtered, isPremium);
-    updateTable(filtered, isPremium);
+
+    // Фильтруем данные
+    const filteredData = currentData.filter(item => {
+        return item.date >= startDate && item.date <= endDate;
+    });
+
+    // Сортируем по дате
+    filteredData.sort((a, b) => a.date.localeCompare(b.date));
+
+    // Определяем, является ли текущий показатель льготной ипотекой
+    const isPremiumMortgage = detailTitle.textContent.includes('Льготная ипотека') &&
+        (detailTitle.textContent.includes('Объем выданных кредитов') ||
+        detailTitle.textContent.includes('Количество выданных кредитов'));
+
+    // Обновляем таблицы и графики
+    updateChart(filteredData, isPremiumMortgage);
+    updateTable(filteredData, isPremiumMortgage);
 }
-function updateChart(data, isPremium) {
-    if (data.length === 0) return;
-    if (isPremium) {
-        renderPremiumMortgageChart(data);
+
+// Обновить таблицы
+function updateTable(data, isPremiumMortgage) {
+    // Очищаем контейнеры
+    pre2025TableContainer.innerHTML = '';
+    post2025TableContainer.innerHTML = '';
+
+    // Проверяем, является ли текущий показатель льготной ипотекой
+    if (isPremiumMortgage) {
+        // Разделяем данные на периоды
+        const pre2025Data = data.filter(item => item.date < '2025-01-01');
+        const post2025Data = data.filter(item => item.date >= '2025-01-01');
+
+        // Создаем таблицу для данных до 2025 года
+        if (pre2025Data.length > 0) {
+            createTable(pre2025Data, pre2025TableContainer, 'Данные до 2025 года', false, isPremiumMortgage);
+            pre2025TableContainer.classList.remove('hidden');
+        }
+
+        // Создаем таблицу для данных с 2025 года
+        if (post2025Data.length > 0) {
+            createTable(post2025Data, post2025TableContainer, 'Данные с 2025 года', true, isPremiumMortgage);
+            post2025TableContainer.classList.remove('hidden');
+        }
     } else {
-        renderStandardChart(data);
+        // Для других показателей используем одну таблицу
+        createTable(data, pre2025TableContainer, '', false, isPremiumMortgage);
+        pre2025TableContainer.classList.remove('hidden');
     }
 }
-function renderStandardChart(data) {
+
+// Функция для определения квартала по дате
+function getQuarterFromDate(dateString) {
+    const date = new Date(dateString);
+    const quarter = Math.floor(date.getMonth() / 3) + 1;
+    return `${quarter} кв ${date.getFullYear()}`;
+}
+
+// Форматирование даты в зависимости от типа показателя
+function formatDateBasedOnIndicator(dateString) {
+    const date = new Date(dateString);
+
+    // Если данные квартальные, выводим квартал
+    if (isQuarterlyData) {
+        const quarter = Math.floor(date.getMonth() / 3) + 1;
+        return `${quarter} кв ${date.getFullYear()}`;
+    }
+
+    // Специальная обработка для льготной ипотеки
+    if (currentIndicatorName.includes('Льготная ипотека')) {
+        // Для объема выданных кредитов до 2024 года - только год
+        if (currentIndicatorName.includes('Объем выданных кредитов') && dateString < '2025-01-01') {
+            return date.getFullYear().toString();
+        }
+        // Для количества выданных кредитов до 2025 года - только год
+        if (currentIndicatorName.includes('Количество выданных кредитов') && dateString < '2025-01-01') {
+            return date.getFullYear().toString();
+        }
+    }
+
+    // Для всех остальных случаев выводим полную дату
+    return date.toLocaleDateString('ru-RU', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    });
+}
+
+// Создать таблицу
+function createTable(data, container, sectionTitle, formatAsPeriod, isPremiumMortgage) {
+    const table = document.createElement('table');
+    table.className = 'detail-table';
+
+    const thead = document.createElement('thead');
+    thead.innerHTML = `
+        <tr>
+            <th>Дата</th>
+            <th>Значение</th>
+        </tr>
+    `;
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+
+    if (sectionTitle) {
+        const sectionHeader = document.createElement('tr');
+        sectionHeader.classList.add('section-header');
+        sectionHeader.innerHTML = `<td colspan="2">${sectionTitle}</td>`;
+        tbody.appendChild(sectionHeader);
+    }
+
+    data.forEach(item => {
+        const row = document.createElement('tr');
+
+        const dateCell = document.createElement('td');
+        // Для квартальных данных используем кварталы
+        if (isQuarterlyData) {
+            dateCell.textContent = getQuarterFromDate(item.date);
+        } else if (formatAsPeriod) {
+            dateCell.textContent = formatDateAsPeriod(item.date);
+        } else {
+            // Используем универсальное форматирование
+            dateCell.textContent = formatDateBasedOnIndicator(item.date);
+        }
+
+        const valueCell = document.createElement('td');
+        // Форматируем число в зависимости от единиц измерения
+        let displayValue;
+
+        // Специальная обработка для льготной ипотеки - количество выданных кредитов
+        if (detailTitle.textContent.includes('Льготная ипотека') &&
+            detailTitle.textContent.includes('Количество выданных кредитов')) {
+            // Всегда 2 знака после запятой
+            displayValue = parseFloat(item.value).toLocaleString('ru-RU', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        } else if (item.unit === 'ед.' || item.unit === 'млн ед.') {
+            displayValue = parseInt(item.value).toLocaleString('ru-RU');
+        } else {
+            const numValue = parseFloat(item.value);
+            displayValue = numValue.toLocaleString('ru-RU', {
+                maximumFractionDigits: 2,
+                minimumFractionDigits: 0
+            });
+        }
+        valueCell.textContent = `${displayValue} ${item.unit}`;
+
+        row.appendChild(dateCell);
+        row.appendChild(valueCell);
+        tbody.appendChild(row);
+    });
+
+    table.appendChild(tbody);
+    container.appendChild(table);
+}
+
+// Обновить график - с оптимизацией для устранения пустого пространства
+function updateChart(data, isPremiumMortgage) {
+    // Уничтожаем предыдущий график
+    if (currentChart) {
+        currentChart.destroy();
+        currentChart = null;
+    }
+
+    if (premiumChart) {
+        premiumChart.destroy();
+        premiumChart = null;
+    }
+
+    // Скрываем дополнительный график
+    premiumChartContainer.classList.add('hidden');
+
+    if (data.length === 0) return;
+
+    // Проверяем, является ли текущий показатель льготной ипотекой
+    if (isPremiumMortgage) {
+        renderPremiumMortgageChart(data);
+    } else {
+        renderStandardChart(data, isPremiumMortgage);
+    }
+}
+
+// Рендеринг стандартного графика - с оптимизацией для устранения пустого пространства
+function renderStandardChart(data, isPremiumMortgage) {
+    // Подготавливаем данные для графика
+    // Для квартальных данных используем кварталы в качестве меток
     const labels = data.map(item => formatDateBasedOnIndicator(item.date));
     const values = data.map(item => parseFloat(item.value));
-    if (currentChart) currentChart.destroy();
+    currentUnit = data.length > 0 ? data[0].unit : '';
+
+    // Создаем новый график
     currentChart = new Chart(detailChartCtx, {
         type: 'line',
-        data: { labels, datasets: [{
-            label: 'Значение',
-            data: values,
-            borderColor: '#5a7ae9',
-            borderWidth: 3,
-            fill: true,
-            backgroundColor: 'rgba(90,122,233,0.1)',
-            pointRadius: 0,
-            tension: 0.2
-        }] },
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Значение',
+                data: values,
+                backgroundColor: 'rgba(90, 122, 233, 0.1)',
+                borderColor: 'rgba(90, 122, 233, 1)',
+                borderWidth: 3,
+                pointRadius: 0, // Убираем точки
+                tension: 0.2,
+                fill: true
+            }]
+        },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    top: 10,
+                    bottom: 10,
+                    left: 10,
+                    right: 10
+                }
+            },
             plugins: {
-                legend: { display: false },
+                legend: {
+                    display: false
+                },
                 tooltip: {
+                    backgroundColor: 'rgba(30, 41, 59, 0.9)',
+                    titleFont: {
+                        size: 14
+                    },
+                    bodyFont: {
+                        size: 14
+                    },
+                    padding: 12,
+                    displayColors: false,
                     callbacks: {
-                        label: (ctx) => `Значение: ${formatValue(ctx.parsed.y)} ${currentUnit}`
+                        label: function(context) {
+                            let value = context.parsed.y;
+                            // Форматируем число для tooltip
+                            let displayValue;
+
+                            // Специальная обработка для льготной ипотеки - количество выданных кредитов
+                            if (detailTitle.textContent.includes('Льготная ипотека') &&
+                                detailTitle.textContent.includes('Количество выданных кредитов')) {
+                                displayValue = value.toLocaleString('ru-RU', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                });
+                            } else if (currentUnit === 'ед.' || currentUnit === 'млн ед.') {
+                                displayValue = parseInt(value).toLocaleString('ru-RU');
+                            } else {
+                                displayValue = value.toLocaleString('ru-RU', {
+                                    maximumFractionDigits: 2,
+                                    minimumFractionDigits: 0
+                                });
+                            }
+                            return `Значение: ${displayValue} ${currentUnit}`;
+                        }
                     }
                 }
             },
             scales: {
-                x: { ticks: { maxRotation: 45, minRotation: 45 } },
-                y: { beginAtZero: true }
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        maxRotation: 45,
+                        minRotation: 45,
+                        padding: 5 // Уменьшаем отступ
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(226, 232, 240, 0.5)'
+                    },
+                    ticks: {
+                        padding: 5 // Уменьшаем отступ
+                    },
+                    // Убираем заголовок с единицами измерения
+                    title: {
+                        display: false
+                    }
+                }
+            },
+            interaction: {
+                mode: 'index',
+                intersect: false
+            },
+            hover: {
+                mode: 'index',
+                intersect: false
             }
         }
     });
 }
-function renderPremiumMortgageChart(data) {
-    const pre2025 = data.filter(d => d.date < '2025-01-01');
-    const post2025 = data.filter(d => d.date >= '2025-01-01');
-    if (pre2025.length) {
-        const labels = pre2025.map(d => formatDateBasedOnIndicator(d.date));
-        const values = pre2025.map(d => parseFloat(d.value));
-        if (currentChart) currentChart.destroy();
-        currentChart = new Chart(detailChartCtx, {
-            type: 'line',
-            data: { labels, datasets: [{
-                label: 'Значение (до 2025)',
-                data: values,
-                borderColor: '#5a7ae9',
-                borderWidth: 3,
-                fill: true,
-                backgroundColor: 'rgba(90,122,233,0.1)',
-                pointRadius: 0,
-                tension: 0.2
-            }] },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: (ctx) => `Значение: ${formatValue(ctx.parsed.y)} ${currentUnit}`
-                        }
-                    }
-                },
-                scales: {
-                    x: { ticks: { maxRotation: 45 } },
-                    y: { beginAtZero: true }
-                }
-            }
-        });
-    }
-    if (post2025.length) {
-        const labels = post2025.map(d => formatDateAsPeriod(d.date));
-        const values = post2025.map(d => parseFloat(d.value));
-        premiumChartContainer.classList.remove('hidden');
-        if (premiumChart) premiumChart.destroy();
-        premiumChart = new Chart(premiumChartCtx, {
-            type: 'bar',
-            data: { labels, datasets: [{
-                label: 'Накопленный объем (2025)',
-                data: values,
-                backgroundColor: '#6d5acf',
-                borderRadius: 6
-            }] },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: (ctx) => `Значение: ${formatValue(ctx.parsed.y)} ${currentUnit}`
-                        }
-                    }
-                },
-                scales: { y: { beginAtZero: true } }
-            }
-        });
-    } else {
-        premiumChartContainer.classList.add('hidden');
-    }
-}
-function updateTable(data, isPremium) {
-    if (isPremium) {
-        const pre2025 = data.filter(d => d.date < '2025-01-01');
-        const post2025 = data.filter(d => d.date >= '2025-01-01');
-        if (pre2025.length) { createTable(pre2025, pre2025TableContainer, 'Данные до 2025 года', false); pre2025TableContainer.classList.remove('hidden'); }
-        if (post2025.length) { createTable(post2025, post2025TableContainer, 'Данные с 2025 года', true); post2025TableContainer.classList.remove('hidden'); }
-    } else {
-        createTable(data, pre2025TableContainer, '', false);
-        pre2025TableContainer.classList.remove('hidden');
-    }
-}
-function createTable(data, container, sectionTitle, formatAsPeriod) {
-    container.innerHTML = '';
-    const table = document.createElement('table');
-    table.className = 'detail-table';
-    table.innerHTML = `<thead><tr><th>Дата</th><th>Значение</th></tr></thead><tbody></tbody>`;
-    const tbody = table.querySelector('tbody');
-    if (sectionTitle) {
-        const tr = document.createElement('tr');
-        tr.className = 'section-header';
-        tr.innerHTML = `<td colspan="2">${sectionTitle}</td>`;
-        tbody.appendChild(tr);
-    }
-    for (const item of data) {
-        const tr = document.createElement('tr');
-        let dateStr;
-        if (isQuarterlyData) dateStr = getQuarterFromDate(item.date);
-        else if (formatAsPeriod) dateStr = formatDateAsPeriod(item.date);
-        else dateStr = formatDateBasedOnIndicator(item.date);
-        tr.innerHTML = `<td>${dateStr}</td><td>${formatValue(parseFloat(item.value))} ${item.unit}</td>`;
-        tbody.appendChild(tr);
-    }
-    container.appendChild(table);
-}
-// Вспомогательные функции форматирования
-function formatDate(dateStr) {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString('ru-RU');
-}
-function formatDateBasedOnIndicator(dateStr) {
-    const d = new Date(dateStr);
-    if (isQuarterlyData) return getQuarterFromDate(dateStr);
-    if (currentIndicatorName.includes('Льготная ипотека')) {
-        if (currentIndicatorName.includes('Объем выданных кредитов') && dateStr < '2025-01-01') return d.getFullYear().toString();
-        if (currentIndicatorName.includes('Количество выданных кредитов') && dateStr < '2025-01-01') return d.getFullYear().toString();
-    }
-    return d.toLocaleDateString('ru-RU', { year:'numeric', month:'2-digit', day:'2-digit' });
-}
-function formatDateAsPeriod(dateStr) {
-    const d = new Date(dateStr);
-    const year = d.getFullYear();
-    const month = d.getMonth();
-    const monthNames = ["янв","фев","мар","апр","май","июн","июл","авг","сен","окт","ноя","дек"];
+
+// Форматирование даты как периода
+function formatDateAsPeriod(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = date.getMonth(); // 0 - январь, 1 - февраль, и т.д.
+    const monthNames = ["янв", "фев", "мар", "апр", "май", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"];
+
+    // Создаем подписи по месяцам
     if (month === 0) return `янв ${year}`;
     if (month === 1) return `янв-фев ${year}`;
     if (month === 2) return `янв-мар ${year}`;
@@ -450,26 +610,223 @@ function formatDateAsPeriod(dateStr) {
     if (month === 8) return `янв-сен ${year}`;
     if (month === 9) return `янв-окт ${year}`;
     if (month === 10) return `янв-ноя ${year}`;
-    return `янв-дек ${year}`;
+    if (month === 11) return `янв-дек ${year}`;
+    return `${monthNames[0]}-${monthNames[month]} ${year}`;
 }
-function getQuarterFromDate(dateStr) {
-    const d = new Date(dateStr);
-    const q = Math.floor(d.getMonth()/3)+1;
-    return `${q} кв ${d.getFullYear()}`;
+
+// Рендеринг графика для льготной ипотеки - с оптимизацией для устранения пустого пространства
+function renderPremiumMortgageChart(data) {
+    // Разделяем данные на периоды: до 2025 и после
+    const pre2025Data = data.filter(item => item.date < '2025-01-01');
+    const post2025Data = data.filter(item => item.date >= '2025-01-01');
+    currentUnit = data.length > 0 ? data[0].unit : '';
+
+    // Рендерим основной график (до 2025)
+    if (pre2025Data.length > 0) {
+        const labels = pre2025Data.map(item => formatDateBasedOnIndicator(item.date));
+        const values = pre2025Data.map(item => parseFloat(item.value));
+
+        currentChart = new Chart(detailChartCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Значение (до 2025)',
+                    data: values,
+                    backgroundColor: 'rgba(90, 122, 233, 0.1)',
+                    borderColor: 'rgba(90, 122, 233, 1)',
+                    borderWidth: 3,
+                    pointRadius: 0,
+                    tension: 0.2,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        top: 10,
+                        bottom: 10,
+                        left: 10,
+                        right: 10
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(30, 41, 59, 0.9)',
+                        titleFont: {
+                            size: 14
+                        },
+                        bodyFont: {
+                            size: 14
+                        },
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                let value = context.parsed.y;
+                                let displayValue;
+                                // Специальная обработка для льготной ипотеки - количество выданных кредитов
+                                if (detailTitle.textContent.includes('Льготная ипотека') &&
+                                    detailTitle.textContent.includes('Количество выданных кредитов')) {
+                                    displayValue = value.toLocaleString('ru-RU', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    });
+                                } else {
+                                    displayValue = value.toLocaleString('ru-RU', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    });
+                                }
+                                return `Значение: ${displayValue} ${currentUnit}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45,
+                            padding: 5
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(226, 232, 240, 0.5)'
+                        },
+                        ticks: {
+                            padding: 5
+                        },
+                        // Убираем заголовок с единицами измерения
+                        title: {
+                            display: false
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                hover: {
+                    mode: 'index',
+                    intersect: false
+                }
+            }
+        });
+    }
+
+    // Рендерим дополнительный график (с 2025)
+    if (post2025Data.length > 0) {
+        const labels = post2025Data.map(item => formatDateAsPeriod(item.date));
+        const values = post2025Data.map(item => parseFloat(item.value));
+
+        premiumChartContainer.classList.remove('hidden');
+        premiumChart = new Chart(premiumChartCtx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Накопленный объем (2025)',
+                    data: values,
+                    backgroundColor: 'rgba(109, 90, 207, 0.7)',
+                    borderColor: 'rgba(109, 90, 207, 1)',
+                    borderWidth: 1,
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        top: 10,
+                        bottom: 10,
+                        left: 10,
+                        right: 10
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(30, 41, 59, 0.9)',
+                        titleFont: {
+                            size: 14
+                        },
+                        bodyFont: {
+                            size: 14
+                        },
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                let value = context.parsed.y;
+                                let displayValue;
+                                // Специальная обработка для льготной ипотеки - количество выданных кредитов
+                                if (detailTitle.textContent.includes('Льготная ипотека') &&
+                                    detailTitle.textContent.includes('Количество выданных кредитов')) {
+                                    displayValue = value.toLocaleString('ru-RU', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    });
+                                } else {
+                                    displayValue = value.toLocaleString('ru-RU', {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    });
+                                }
+                                return `Значение: ${displayValue} ${currentUnit}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45,
+                            padding: 5
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(226, 232, 240, 0.5)'
+                        },
+                        ticks: {
+                            padding: 5
+                        },
+                        // Убираем заголовок с единицами измерения
+                        title: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    }
 }
-function formatValue(val) {
-    if (currentUnit === 'ед.' || currentUnit === 'млн ед.') return Math.round(val).toLocaleString('ru-RU');
-    return val.toLocaleString('ru-RU', { maximumFractionDigits: 2, minimumFractionDigits: 0 });
-}
-function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
+
+// Форматирование даты
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ru-RU', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
     });
 }
-// Автообновление при смене дат
-startDateInput.addEventListener('change', () => { if (updateTimeout) clearTimeout(updateTimeout); updateTimeout = setTimeout(updateDetailView, 300); });
-endDateInput.addEventListener('change', () => { if (updateTimeout) clearTimeout(updateTimeout); updateTimeout = setTimeout(updateDetailView, 300); });
